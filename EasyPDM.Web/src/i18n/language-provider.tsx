@@ -11,14 +11,15 @@ function readStoredLanguage(): Language {
   return defaultLanguage()
 }
 
-// 首次访问且未手动选过语言时，按浏览器语言匹配（zh→中文、de→德语、en→英语），
-// 匹配不到时保持上游默认的波兰语。选择过的语言仍存入 localStorage 并优先。
+// 首次访问且未手动选过语言时：浏览器语言为 zh/de/en 时直接匹配，其余一律默认简体中文
+// （fork 版 nimingming1135/EasyPDM 面向中文用户，故将中文设为默认）。选择过的语言仍
+// 存入 localStorage 并优先于本默认值。
 function defaultLanguage(): Language {
   const lang = (typeof navigator !== "undefined" && navigator.language?.toLowerCase()) || ""
   if (lang.startsWith("zh")) return "zh"
   if (lang.startsWith("de")) return "de"
   if (lang.startsWith("en")) return "en"
-  return "pl"
+  return "zh"
 }
 
 function LanguageProvider({ children }: { children: ReactNode }) {

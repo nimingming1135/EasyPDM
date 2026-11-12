@@ -1,6 +1,8 @@
 # EasyPDM — PDM System for CAD Files
 
-**English** | [Polski](README.pl.md) | [Deutsch](README.de.md)
+**English** | [Polski](README.pl.md) | [Deutsch](README.de.md) | [中文（简体）](README.md)
+
+> 🌐 **Interface language**: this fork (nimingming1135/EasyPDM) bundles a **Simplified Chinese** interface and uses it as the default; the browser opens in Chinese after install. To switch, use the language selector next to your name (top right) — choose between 中文 / English / Polski / Deutsch. The Windows installer also offers a Chinese (Simplified) wizard.
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="136">](https://buymeacoffee.com/easypdm)
 
