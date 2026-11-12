@@ -55,18 +55,21 @@ public class ProjectLanguageTests
     }
 
     [Fact]
-    public async Task Na_start_jest_English_i_Polish_a_domyslny_English()
+    public async Task Na_start_jest_Chinese_i_English_i_Polish_a_domyslny_Chinese()
     {
         await using var factory = new EasyPDMWebApplicationFactory();
         using var admin = factory.CreateClient();
         await admin.LoginAsync("admin", "admin");
 
         var list = (await admin.GetFromJsonAsync<JsonElement>("/api/project-languages")).EnumerateArray().ToList();
+        var zh = list.Single(l => l.GetProperty("code").GetString() == "ZH");
         var en = list.Single(l => l.GetProperty("code").GetString() == "EN");
         var pl = list.Single(l => l.GetProperty("code").GetString() == "PL");
+        Assert.Equal("Chinese (Simplified)", zh.GetProperty("name").GetString());
         Assert.Equal("English", en.GetProperty("name").GetString());
         Assert.Equal("Polish", pl.GetProperty("name").GetString());
-        Assert.True(en.GetProperty("isDefault").GetBoolean());
+        // Ten fork ustawia chiński jako domyślny język dokumentacji (db/schema.sql, migracja 068).
+        Assert.True(zh.GetProperty("isDefault").GetBoolean());
         Assert.Single(list, l => l.GetProperty("isDefault").GetBoolean());
     }
 

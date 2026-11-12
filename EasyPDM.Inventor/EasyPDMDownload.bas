@@ -134,6 +134,10 @@ Private Function DetectLanguage() As String
             DetectLanguage = "pl"
         Case &H7
             DetectLanguage = "de"
+        Case &H4
+            DetectLanguage = "zh"
+        Case &H9
+            DetectLanguage = "en"
         Case Else
             DetectLanguage = "zh"
     End Select
@@ -163,7 +167,7 @@ End Function
 
 Private Function T_ZH(ByVal key As String) As String
     Select Case key
-        Case "Dl_WrongFormatSuffix": T_ZH = ChrW(&HFF0C) & ChrW(&H9884) & ChrW(&H671F) & " .sldprt/.sldasm " & ChrW(&H6216) & " .ipt/.iam" & ChrW(&HFF09) & ChrW(&H2014) & ChrW(&H2014) & ChrW(&H8DF3) & ChrW(&H8FC7) & ChrW(&HFF0C) & ChrW(&H907F) & ChrW(&H514D) & ChrW(&H6253) & ChrW(&H5F00) & ChrW(&H9519) & ChrW(&H8BEF) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H3002)
+        Case "Dl_WrongFormatSuffix": T_ZH = ChrW(&HFF0C) & ChrW(&H9884) & ChrW(&H671F) & " .ipt/.iam" & ChrW(&HFF09) & ChrW(&H2014) & ChrW(&H2014) & ChrW(&H8DF3) & ChrW(&H8FC7) & ChrW(&HFF0C) & ChrW(&H907F) & ChrW(&H514D) & ChrW(&H6253) & ChrW(&H5F00) & ChrW(&H9519) & ChrW(&H8BEF) & ChrW(&H7684) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H3002)
         Case "NoConnectionPrefix": T_ZH = ChrW(&H65E0) & ChrW(&H6CD5) & ChrW(&H8FDE) & ChrW(&H63A5) & ChrW(&H5230) & " "
         Case "Dl_AlreadyInFolder": T_ZH = ChrW(&HFF1A) & ChrW(&H5DF2) & ChrW(&H5728) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H5939) & ChrW(&H4E2D) & ChrW(&HFF08) & ChrW(&H5F53) & ChrW(&H524D) & ChrW(&H7248) & ChrW(&H6B21) & ChrW(&HFF09) & ChrW(&HFF0C) & ChrW(&H8DF3) & ChrW(&H8FC7) & ChrW(&H3002)
         Case "Dl_NoAttachments": T_ZH = ChrW(&HFF1A) & ChrW(&H6CA1) & ChrW(&H6709) & ChrW(&H53EF) & ChrW(&H4E0B) & ChrW(&H8F7D) & ChrW(&H7684) & " CAD " & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&HFF08) & ChrW(&H8BE5) & ChrW(&H6761) & ChrW(&H76EE) & ChrW(&H65E0) & ChrW(&H9644) & ChrW(&H4EF6) & ChrW(&HFF09) & ChrW(&H3002)
@@ -214,7 +218,7 @@ Private Function T(ByVal key As String) As String
         Case "pl": T = T_PL(key)
         Case "de": T = T_DE(key)
         Case "zh": T = T_ZH(key)
-        Case Else: T = T_ZH(key)
+        Case Else: T = T_EN(key)
     End Select
 End Function
 

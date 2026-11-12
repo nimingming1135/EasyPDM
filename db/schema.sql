@@ -662,4 +662,8 @@ INSERT INTO schema_migrations (filename) VALUES
     ('046_attachment_drawing_role.sql'),
     -- Zakładały kolumnę processes.name, której ten schemat już nie ma (065 przeniosła nazwy
     -- do process_texts) -- ich efekt jest tu w całości, więc nie wykonują się na świeżej bazie.
-    ('061_processes.sql'), ('062_process_names_not_unique.sql'), ('065_process_texts.sql');
+    ('061_processes.sql'), ('062_process_names_not_unique.sql'), ('065_process_texts.sql'),
+    -- 068 tylko przestawia domyślny język dokumentacji na ZH -- ten schemat zasiewa go już
+    -- jako domyślny (zob. INSERT INTO project_languages wyżej), więc na świeżej bazie nie ma
+    -- czego wykonywać.
+    ('068_project_language_zh_default.sql');

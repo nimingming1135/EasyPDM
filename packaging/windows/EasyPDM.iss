@@ -87,6 +87,10 @@ Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 ; 简体中文消息文件随仓库提供（packaging\windows\languages\ChineseSimplified.isl），
 ; 因为云端构建用的 Inno Setup 6.7.1 尚未内置该语言（官方 6.5.0+ 才加入内置，
 ; 但 GitHub runner 预装的版本不含此文件）。使用相对路径引用，确保本地与云端均可编译。
+;
+; 注意版本下限：该 .isl 是 6.5.0+ 的官方消息文件，且以「无 BOM 的 UTF-8」保存——
+; 无 BOM 的 UTF-8 脚本/.isl 从 Inno Setup 6.3 起才被识别。本地用 6.2 或更旧的编译器
+; 会读到乱码（或直接报错）。CI 用的 6.7.1 没问题。
 Name: "zh"; MessagesFile: ".\languages\ChineseSimplified.isl"
 
 [Files]

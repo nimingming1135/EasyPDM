@@ -1,6 +1,6 @@
 # EasyPDM — PDM-System für CAD-Dateien
 
-[English](README.md) | [Polski](README.pl.md) | **Deutsch**
+[English](README.en.md) | [Polski](README.pl.md) | **Deutsch** | [中文（简体）](README.md)
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="136">](https://buymeacoffee.com/easypdm)
 

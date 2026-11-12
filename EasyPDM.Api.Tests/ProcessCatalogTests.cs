@@ -121,6 +121,14 @@ public class ProcessTranslationTests
         return list.EnumerateArray().Single(l => l.GetProperty("code").GetString() == code).GetProperty("id").GetInt32();
     }
 
+    // Domyślny język dokumentacji czytany z API, zamiast zaszywania konkretnego kodu --
+    // ten fork ustawia ZH, ale test ma sprawdzać mechanizm, nie konkretną wartość.
+    private static async Task<int> DefaultLanguageIdAsync(HttpClient client)
+    {
+        var list = await client.GetFromJsonAsync<JsonElement>("/api/project-languages");
+        return list.EnumerateArray().Single(l => l.GetProperty("isDefault").GetBoolean()).GetProperty("id").GetInt32();
+    }
+
     private static async Task<JsonElement> ProcessAsync(HttpClient client, int id)
     {
         var list = await client.GetFromJsonAsync<JsonElement>("/api/processes");
@@ -135,14 +143,18 @@ public class ProcessTranslationTests
         await admin.LoginAsync("admin", "admin");
         var en = await LanguageIdAsync(admin, "EN");
         var pl = await LanguageIdAsync(admin, "PL");
+        // Fork ustawia chiński jako domyślny język dokumentacji, ale ten test nie ma powodu
+        // zakładać KONKRETNEGO języka -- sprawdza mechanizm "nowa obróbka trafia do
+        // domyślnego", więc domyślny czytamy z API i na końcu przywracamy ten sam.
+        var defaultLang = await DefaultLanguageIdAsync(admin);
         var tag = Guid.NewGuid().ToString("N")[..6];
 
-        // Nowa obróbka trafia do domyślnego języka (English).
+        // Nowa obróbka trafia do domyślnego języka dokumentacji.
         var created = await admin.PostAsJsonAsync("/api/processes",
             new { name = "Hardening " + tag, description = "to 50 HRC", forParts = true, forAssemblies = false });
         var id = (await created.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id").GetInt32();
         var process = await ProcessAsync(admin, id);
-        Assert.Equal(en, process.GetProperty("languageId").GetInt32());
+        Assert.Equal(defaultLang, process.GetProperty("languageId").GetInt32());
         Assert.Single(process.GetProperty("texts").EnumerateArray());
 
         (await admin.PutAsJsonAsync($"/api/processes/{id}/texts", new
@@ -180,7 +192,9 @@ public class ProcessTranslationTests
         }
         finally
         {
-            (await admin.PutAsync($"/api/project-languages/{en}/default", null)).EnsureSuccessStatusCode();
+            // Przywracamy domyślny język SPRZED tego testu (nie zaszyte "en") -- inaczej test
+            // przestawiłby globalne ustawienie dla wszystkich kolejnych klas testowych.
+            (await admin.PutAsync($"/api/project-languages/{defaultLang}/default", null)).EnsureSuccessStatusCode();
         }
 
         // Nie da się zostawić obróbki bez żadnej nazwy.

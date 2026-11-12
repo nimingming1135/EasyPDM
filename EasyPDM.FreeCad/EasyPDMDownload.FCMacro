@@ -108,6 +108,8 @@ def _match_lang(raw):
         return "de"
     if raw.startswith("en") or "english" in raw:
         return "en"
+    if raw.startswith("zh") or "chinese" in raw or "中文" in raw:
+        return "zh"
     return None
 
 
@@ -115,9 +117,9 @@ def _detect_language():
     """Auto-wykrycie języka: najpierw własne ustawienie FreeCAD (Preferences -> General ->
     Language) — bywa zapisane jako nazwa ("Polish"/"German") albo jako kod locale
     ("pl"/"pl_PL"/"de_DE" — stąd dopasowanie i po nazwie, i po prefiksie kodu), a jeśli to
-    niejednoznaczne (pusty string albo coś spoza pl/en/de), sprawdzamy locale systemu
+    niejednoznaczne (pusty string albo coś spoza pl/en/de/zh), sprawdzamy locale systemu
     operacyjnego ($LANGUAGE/$LC_ALL/$LANG — na Linuksie zwykle "pl_PL.UTF-8"). Fallback na
-    angielski, jeśli nic nie pasuje albo odczyt się nie powiedzie."""
+    chiński (ten fork jest domyślnie chiński), gdy nic nie pasuje albo odczyt się nie powiedzie."""
     try:
         raw = App.ParamGet("User parameter:BaseApp/Preferences/General").GetString("Language", "")
     except Exception:
@@ -348,6 +350,8 @@ TRANSLATIONS = {
         "item_no_longer_exists": "所选条目已不存在。",
         "download_interrupted": "下载被意外错误中断：",
         "log_so_far": "\n已记录日志：\n",
+        "log_wrong_format": "  {label}：标记为 CAD 文件的附件扩展名异常“{ext}”（预期 .FCStd）——跳过，避免打开错误的文件（{fileName}）。",
+        "newer_revision_body": "文件夹中已有 {label} 的版次 {rev_list}，而服务器上的当前版次为 {wanted}。\n\n是否下载最新版本？",
     },
 }
 
