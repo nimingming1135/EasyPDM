@@ -1,4 +1,4 @@
-; Instalator Windows dla EasyPDM — Inno Setup (https://jrsoftware.org/isinfo.php).
+﻿; Instalator Windows dla EasyPDM — Inno Setup (https://jrsoftware.org/isinfo.php).
 ;
 ; PRZED kompilacją: uruchom packaging\windows\build.ps1 (buduje frontend + publikuje
 ; self-contained backend win-x64 do packaging\windows\publish\), potem skompiluj ten plik
@@ -84,9 +84,10 @@ SetupIconFile=..\..\EasyPDM.Api\app.ico
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "pl"; MessagesFile: "compiler:Languages\Polish.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"
-; 简体中文是 Inno Setup 6 官方内置语言（编译器自带 Languages\ChineseSimplified.isl，
-; GitHub Actions 的 windows runner 预装的 Inno Setup 也包含它），无需向仓库添加文件。
-Name: "zh"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+; 简体中文消息文件随仓库提供（packaging\windows\languages\ChineseSimplified.isl），
+; 因为云端构建用的 Inno Setup 6.7.1 尚未内置该语言（官方 6.5.0+ 才加入内置，
+; 但 GitHub runner 预装的版本不含此文件）。使用相对路径引用，确保本地与云端均可编译。
+Name: "zh"; MessagesFile: ".\languages\ChineseSimplified.isl"
 
 [Files]
 Source: "publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
