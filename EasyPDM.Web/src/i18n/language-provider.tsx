@@ -7,7 +7,18 @@ const STORAGE_KEY = "pdm_language"
 
 function readStoredLanguage(): Language {
   const stored = localStorage.getItem(STORAGE_KEY)
-  return stored !== null && stored in translations ? (stored as Language) : "pl"
+  if (stored !== null && stored in translations) return stored as Language
+  return defaultLanguage()
+}
+
+// 首次访问且未手动选过语言时，按浏览器语言匹配（zh→中文、de→德语、en→英语），
+// 匹配不到时保持上游默认的波兰语。选择过的语言仍存入 localStorage 并优先。
+function defaultLanguage(): Language {
+  const lang = (typeof navigator !== "undefined" && navigator.language?.toLowerCase()) || ""
+  if (lang.startsWith("zh")) return "zh"
+  if (lang.startsWith("de")) return "de"
+  if (lang.startsWith("en")) return "en"
+  return "pl"
 }
 
 function LanguageProvider({ children }: { children: ReactNode }) {

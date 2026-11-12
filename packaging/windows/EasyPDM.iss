@@ -74,7 +74,7 @@ WizardStyle=modern
 SetupIconFile=..\..\EasyPDM.Api\app.ico
 
 [Languages]
-; Te same trzy języki co aplikacja webowa (pl/en/de) — Inno Setup POKAZUJE OKNO WYBORU
+; Te same języki co aplikacja webowa (pl/en/de/zh) — Inno Setup POKAZUJE OKNO WYBORU
 ; JĘZYKA na samym początku instalacji automatycznie, gdy zdefiniowany jest więcej niż
 ; jeden język (domyślne ShowLanguageDialog=auto, nieustawione tutaj celowo — nie trzeba
 ; nic dodatkowo konfigurować). Tłumaczy to WBUDOWANE strony kreatora Inno Setup (Witaj,
@@ -84,6 +84,9 @@ SetupIconFile=..\..\EasyPDM.Api\app.ico
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "pl"; MessagesFile: "compiler:Languages\Polish.isl"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"
+; 简体中文是 Inno Setup 6 官方内置语言（编译器自带 Languages\ChineseSimplified.isl，
+; GitHub Actions 的 windows runner 预装的 Inno Setup 也包含它），无需向仓库添加文件。
+Name: "zh"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
 [Files]
 Source: "publish\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
@@ -143,6 +146,21 @@ de.PgSchemaLoadFailed=Das Datenbankschema konnte nicht geladen werden. Details i
 de.ServiceDescription=Lokaler PDM-Server
 de.DowngradeBlocked=Es ist bereits eine neuere Version von EasyPDM (%1) installiert — dieses Installationsprogramm enthält Version %2. Eine ältere Version über eine neuere zu installieren wird nicht unterstützt: Die Datenbank wurde bereits auf das neuere Schema migriert, das ältere Versionen nicht lesen können. Deinstallieren Sie zuerst die aktuelle Version, wenn Sie wirklich zurückgehen möchten.
 de.DataKeptAfterUninstall=EasyPDM wurde entfernt, seine Datenbank und Dateien wurden jedoch bewusst behalten.%n%nUm auch diese zu entfernen:%n- in pgAdmin oder psql als postgres: DROP DATABASE %1; danach DROP ROLE %2;%n- den Ordner %3 löschen (gespeicherte Dateien, Sicherungen, Protokolle).
+
+; 中文（简体）——与上方 en./pl./de. 相同的一组自定义文案，前缀与 [Languages] 中的 Name 对应
+zh.PgPageCaption=连接 PostgreSQL
+zh.PgPageSubCaption=超级用户 "postgres" 的密码
+zh.PgPageDescription=EasyPDM 只需要它一次，用于创建自己的数据库角色和数据库（easypdm）——密码不会保存到任何地方。
+zh.PgFieldLabel="postgres" 的密码：
+zh.PgNotFoundConfirm=未找到已安装的 PostgreSQL（必需，推荐版本 18）。是否打开下载页面？安装完成后请重新运行本安装程序。
+zh.PgPasswordRequired=请输入超级用户 "postgres" 的密码。
+zh.PgConnectionFailed=无法使用该密码连接到 PostgreSQL。请重试。
+zh.PgRoleConfigFailed=无法配置 PostgreSQL 数据库角色。请检查超级用户 "postgres" 的密码，以及该端口（5432）上是否还有其他 PostgreSQL 实例在运行。详情见日志：
+zh.PgDatabaseCreateFailed=无法创建 PostgreSQL 数据库。详情见日志：
+zh.PgSchemaLoadFailed=无法加载数据库模式。详情见日志：
+zh.ServiceDescription=本地 PDM 服务器
+zh.DowngradeBlocked=已安装较新版本的 EasyPDM（%1）——本安装程序包含的是版本 %2。不支持在较新版本上安装较旧版本：数据库已迁移到较新的模式，旧版本无法读取。如确实需要回退，请先卸载当前版本。
+zh.DataKeptAfterUninstall=EasyPDM 已卸载，但其数据库和文件已被特意保留。%n%n如需一并删除：%n- 在 pgAdmin 或 psql 中以 postgres 身份执行：DROP DATABASE %1; 然后 DROP ROLE %2;%n- 删除文件夹 %3（存储的文件、备份、日志）。
 
 [Code]
 const
