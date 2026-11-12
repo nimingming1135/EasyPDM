@@ -1,464 +1,218 @@
-# EasyPDM — PDM System for CAD Files
+# EasyPDM — 面向 CAD 文件的 PDM 系统
 
-**English** | [Polski](README.pl.md) | [Deutsch](README.de.md)
+**中文（简体）** | [English](README.en.md) | [Polski](README.pl.md) | [Deutsch](README.de.md)
 
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="136">](https://buymeacoffee.com/easypdm)
 
-▶️ **Video series on YouTube** ([playlist](https://www.youtube.com/playlist?list=PLe2vSF7-ieUA)): [1. What a PDM is and why EasyPDM](https://youtu.be/OaqyJQCHkt4) ·
-[2. Installation — Windows, Docker or Linux](https://youtu.be/ZwAWCJN9tWg) ·
-[3. Projects and structure](https://youtu.be/ZB3pXQY6-e0) ·
-[4. From CAD to PDM — the upload macro](https://youtu.be/vMQPxwWQrGc) ·
-[5. A whole assembly — upload, download, update and drawings](https://youtu.be/vXHYbRlPu_s)
+▶️ **YouTube 视频系列**（[播放列表](https://www.youtube.com/playlist?list=PLe2vSF7-ieUA)）：[1. 什么是 PDM，为什么选择 EasyPDM](https://youtu.be/OaqyJQCHkt4) ·
+[2. 安装 —— Windows、Docker 或 Linux](https://youtu.be/ZwAWCJN9tWg) ·
+[3. 项目与结构](https://youtu.be/ZB3pXQY6-e0) ·
+[4. 从 CAD 到 PDM —— 上传宏](https://youtu.be/vMQPxwWQrGc) ·
+[5. 一整套装配体 —— 上传、下载、更新与工程图](https://youtu.be/vXHYbRlPu_s)
 
-EasyPDM is where your Parts and Assemblies get one, shared order for the whole team:
-every item has its own number, revision, status and change history, and assemblies get
-a ready-made bill of materials (BOM). No more `bracket_v3_FINAL_FOR_REAL.SLDPRT` on a
-shared drive and the question "which version is the current one?". Ready-made macros
-for FreeCAD, SolidWorks and Autodesk Inventor send and fetch files straight from within
-the CAD program — everything else (the browser app, material/manufacturer catalogs, BOM)
-works the same regardless of what you design in.
+EasyPDM 让全团队的零件和装配体拥有一套统一的秩序：每个条目都有自己的编号、版次、状态和变更历史，装配体自动生成现成的物料清单（BOM）。再也不用在共享盘上出现 `bracket_v3_FINAL_FOR_REAL.SLDPRT`，也不用再问"到底哪个版本是最新的"。FreeCAD、SolidWorks 和 Autodesk Inventor 的现成宏可以直接在 CAD 软件里收发文件——其余的一切（浏览器应用、材料/制造商目录、BOM）与你使用什么软件设计无关，工作方式完全一致。
 
-I'm a mechanical design engineer and I knew exactly what such a tool should look like
-and how it should work day to day — what I was missing when working with CAD files.
-I didn't write the code myself: the whole application was written for me by Claude (an
-AI model from Anthropic) based on my requirements and descriptions. I built EasyPDM for
-my own use, and since it already exists and works — why not share it with others.
+我是一名机械设计工程师，非常清楚这样的工具应该是什么样子、日常该怎么用——也就是我处理 CAD 文件时一直缺失的东西。代码不是我写的：整个应用是由 Claude（Anthropic 的一个 AI 模型）根据我的需求和描述为我编写的。我为自己搭建了 EasyPDM，既然它已经存在并且能用——为什么不分享出来。
 
-## What it gives you
+## 它能给你什么
 
-- **One number, one history** — every Part and Assembly gets an automatically assigned
-  number that no one else will ever get again. You can see who changed what and when,
-  who currently has an item "on their bench", and which revision is current.
-- **Instant bill of materials** — an assembly shows the list of its own components with
-  quantities, material, manufacturer, order numbers — ready to export to CSV.
-- **Shared material and manufacturer catalogs** — pick from a list instead of typing it
-  in by hand every time, so names don't drift apart between projects.
-- **Search across the whole company database**, not just the current project — handy
-  when you want to check whether a similar part already exists somewhere.
-- **Item locking** — while you're working on something, no one else can overwrite your
-  changes without your consent (an administrator can take over or release someone
-  else's lock if needed — e.g. when the owner is away).
-- **Notifications** — a bell icon shows what needs your attention: an item of yours
-  waiting for review, released, or reverted to "In progress", a new revision, a verdict
-  from the client on something you designed, being added to or removed from a project, or
-  (administrators) low disk space — each type can be turned off individually in Settings.
+- **一个编号，一份历史** —— 每个零件和装配体都会自动获得一个永不再复用的编号。你可以看到谁在何时改了什么、当前谁把某个条目"占在自己桌上"，以及哪个版次是最新的。
+- **即点即得的物料清单** —— 装配体展示其组件清单：数量、材料、制造商、订货号——随时可导出为 CSV。
+- **全公司共享的材料与制造商目录** —— 从列表里选，而不是每次手动输入，避免不同项目之间名称各写各的。
+- **跨整个公司数据库搜索**，而不只是当前项目——想确认某处是否已有类似零件时很方便。
+- **条目锁定** —— 你正在做的内容，别人未经同意无法覆盖（管理员可以在需要时接管或解除他人的锁——例如所有者不在场时）。
+- **通知** —— 铃铛图标提示需要你关注的事：你的条目等待审核、已发布、被退回"进行中"、出现新版次、客户对你设计的结论、你被加入或移出某个项目，以及（管理员）磁盘空间不足——每种类型都可在设置中单独关闭。
 
-## First run
+## 首次运行
 
-EasyPDM is installed ONCE — on a single computer in the company (not necessarily some
-special "server", an ordinary computer that's simply left switched on works fine too).
-From then on, everyone connects to it with a regular web browser, just like any
-website — only at an address visible exclusively inside your company network, not on
-the public internet.
+EasyPDM 只需安装一次——装在公司里的某台电脑上（不一定是专门的"服务器"，一台普通的、一直开着的电脑就够用）。之后所有人用普通网页浏览器连接它，就像访问任何网站一样——只是地址只存在于公司内网，不在公网上。
 
-**If EasyPDM is already running at your company** — ask whoever installed it for the
-address (it will look something like `http://192.168.1.20:5000`, or
-`http://localhost:5000` if EasyPDM is running on your own computer). Type it into your
-browser's address bar, just like any other website address, and log in.
+**如果公司里已经在用 EasyPDM** —— 向安装它的人要地址（形如 `http://192.168.1.20:5000`，如果 EasyPDM 就运行在你自己的电脑上，则是 `http://localhost:5000`）。在浏览器地址栏输入该地址（就像访问任何网站一样），然后登录。
 
-**If nobody has installed it yet and it's up to you:**
+**如果还没人安装、由你负责：**
 
-**Windows** (no IT knowledge required) — go to the
-[Releases page of this repository](https://github.com/pawelcel/EasyPDM/releases),
-download the latest `EasyPDM_Windows_v<version>.exe` file and run it — the installation wizard will
-walk you through the rest step by step and leave a shortcut to EasyPDM on your desktop
-(the only thing it might ask about: whether you already have PostgreSQL installed, the
-program that stores the data — if not, it will point you to where to download it before
-it can continue).
+**Windows**（无需 IT 知识）——前往[本仓库的 Releases 页面](https://github.com/pawelcel/EasyPDM/releases)，下载最新的 `EasyPDM_Windows_v<版本>.exe` 文件并运行——安装向导会一步步带你完成，并在桌面留下 EasyPDM 快捷方式（它可能会问一件事：你是否已经安装了 PostgreSQL，即存储数据的程序——如果没有，它会先告诉你去哪里下载，然后才能继续）。
 
-**Linux** (some comfort with a terminal is enough — pick one):
+**Linux**（会用终端即可——二选一）：
 
-- *Docker* (recommended if Docker is already installed on the machine):
+- *Docker*（机器上已装 Docker 时推荐）：
   ```bash
   git clone https://github.com/pawelcel/EasyPDM.git
   cd EasyPDM
   ./install-easypdm-docker.sh
   ```
-- *Native install, no Docker* — download the ready-made `EasyPDM-Linux-x64_v<version>.tar.gz`
-  package from the [Releases page](https://github.com/pawelcel/EasyPDM/releases), or clone
-  the repo yourself, then:
+- *原生安装，不用 Docker* —— 从 [Releases 页面](https://github.com/pawelcel/EasyPDM/releases)下载现成的 `EasyPDM-Linux-x64_v<版本>.tar.gz` 安装包，或自行克隆仓库，然后：
   ```bash
-  mkdir easypdm && tar xzf EasyPDM-Linux-x64_v<version>.tar.gz -C easypdm && cd easypdm   # if you downloaded the package
+  mkdir easypdm && tar xzf EasyPDM-Linux-x64_v<版本>.tar.gz -C easypdm && cd easypdm   # 如果下载了安装包
   sudo ./install-easypdm-linux.sh
   ```
-  This installs PostgreSQL (if missing) and EasyPDM itself as a `systemd` service that
-  starts automatically with the machine.
+  此脚本会安装 PostgreSQL（如果缺失），并把 EasyPDM 安装为随开机自启的 `systemd` 服务。
 
-Either way, EasyPDM ends up at `http://localhost:5000` (or the machine's address on
-your network, from another computer) — or at the next free port if 5000 is already taken;
-the installer prints the address at the end. Full details, updating, and uninstalling: see
-[`TECHNICAL.md`](TECHNICAL.md).
+无论哪种方式，EasyPDM 最终都运行在 `http://localhost:5000`（或该机器在内网中的地址，供其他电脑访问）——如果 5000 端口已被占用，则使用下一个可用端口；安装程序最后会打印出地址。完整的安装细节、更新与卸载：见 [`TECHNICAL.md`](TECHNICAL.md)（英文）。
 
-First login on a freshly installed EasyPDM: username `admin`, password `admin` — change
-this password right after logging in (Settings → Users → find the `admin` account in
-the list → change password).
+全新安装后的首次登录：用户名 `admin`，密码 `admin` —— 登录后请立即修改该密码（设置 → 用户 → 在列表中找到 `admin` 账户 → 修改密码）。
 
-A brand new, empty database also gets one sample project on first startup — an assembly
-with two parts, something to explore instead of a blank slate. A notification points it
-out and reminds you to clear it (Settings → File storage → Danger zone) before real use.
+全新空数据库在首次启动时还会自动创建一个示例项目——一个带两个零件的装配体，让你有点东西可以探索，而不是一片空白。系统会通过通知提醒你在正式使用前清空它（设置 → 文件存储 → 危险区）。
 
-After logging in: pick a project (or create a new one, if you have permission) — that's
-the container for your files and assembly structure — and install the macro for your
-CAD program, see below.
+登录之后：选择一个项目（有权限的话也可以新建一个）——它是你的文件和装配结构的容器——然后为你的 CAD 软件安装宏，见下文。
 
-## Working from FreeCAD / SolidWorks / Inventor
+## 在 FreeCAD / SolidWorks / Inventor 中工作
 
-The macros add two simple operations inside the CAD program: **Upload** (send the active
-document to the PDM) and **Download** (fetch a Part/Assembly from the PDM, together with
-the whole assembly, and open it in the program).
+宏在 CAD 软件里只添加两个简单操作：**上传**（把当前文档发送到 PDM）和**下载**（从 PDM 取回零件/装配体及其整个装配结构，并在软件中打开）。
 
-Installation and details:
-- FreeCAD: [`EasyPDM.FreeCad/README.md`](EasyPDM.FreeCad/README.md)
-- SolidWorks: [`EasyPDM.SolidWorks/README.md`](EasyPDM.SolidWorks/README.md)
-- Autodesk Inventor: [`EasyPDM.Inventor/README.md`](EasyPDM.Inventor/README.md)
+安装与细节：
+- FreeCAD：[`EasyPDM.FreeCad/README.md`](EasyPDM.FreeCad/README.md)
+- SolidWorks：[`EasyPDM.SolidWorks/README.md`](EasyPDM.SolidWorks/README.md)
+- Autodesk Inventor：[`EasyPDM.Inventor/README.md`](EasyPDM.Inventor/README.md)
 
-**Upload** — you have a saved file open, you click Upload. Your browser opens
-(automatically logged in) and asks: new item, duplicate of an existing one (copies its
-properties, no files), or attach a new version to an already-existing item. You choose,
-confirm in the browser — the macro detects completion on its own and finishes the upload
-(renames the local file to the PDM number, attaches the file, and — if you tick the boxes
-in the browser — exports a STEP and/or a PDF, and saves a picture of the model). For a whole assembly: the macro detects its components on
-its own and shows them in one window as a tree, then walks through each new one before
-sending the main file. Only the main file asks where it goes — its components follow the
-tree from the CAD program and join its project as BOM positions, without cluttering the
-project tree on their own. Components already in the PDM and still in work are updated in
-the same run (CAD file, and STEP/PDF if you want them); released or under-review ones are
-named once, up front, and left alone.
+**上传** —— 你打开一个已保存的文件，点击上传。浏览器会打开（已自动登录）并询问：新建条目、复制某个现有条目（复制其属性、不含文件），还是为已有条目追加一个新版本。你做出选择并在浏览器中确认——宏会自动检测到操作完成并结束上传（把本地文件重命名为 PDM 编号、附加文件，并且——如果你在浏览器里勾选了——导出 STEP 和/或 PDF，并保存一张模型图片）。整装配件上传时：宏自动识别其组件并把它们以树的形式显示在一个窗口中，在发送主文件之前逐个处理新组件。只有主文件会询问去向——它的组件跟随 CAD 软件给出的树，作为 BOM 位置加入同一项目，不会在项目树里单独占位。已在 PDM 中且仍处于在制状态的组件在同一次运行中一并更新（CAD 文件，以及按需的 STEP/PDF）；已发布或审核中的组件会被提前统一命名并保持不动。
 
-**Technical drawings** are recognized as such (a `.SLDDRW`/`.idw`/`.dwg` file, or a FreeCAD
-TechDraw page) and matched to the Part/Assembly they document — by reading which models the
-drawing's views actually point at, not by guessing from the file name. The drawing uploads
-as its own attachment, one per revision, alongside the model's own CAD file, and can
-optionally be exported to PDF. If a drawing documents something that has never been
-uploaded, the macro offers to send that Part/Assembly first and then continues straight
-into the drawing.
+**工程图** 会被识别为图纸（`.SLDDRW`/`.idw`/`.dwg` 文件，或 FreeCAD TechDraw 页面），并匹配到它所记录的零件/装配体——依据是图纸的视图实际指向哪些模型，而不是靠文件名去猜。图纸作为独立附件上传，每个版次一份，与模型自身的 CAD 文件并列，并且可以选择导出为 PDF。如果一张图纸记录的东西从未上传过，宏会先建议发送该零件/装配体，然后接着处理图纸。
 
-The SolidWorks and Inventor macros also write the item's name into a document property
-called `EasyPDM_Name`, so your drawing templates and title blocks can pull it in. Both also fill in
-the **mass and the material** by themselves: the macro writes them into the document, reads
-them back and puts them on the item in EasyPDM. In SolidWorks the two properties hold a
-SolidWorks expression rather than a value, so they keep up with the model on their own; in
-Inventor they are a snapshot taken at upload. The material also comes along when the browser
-opens to create the item, so the Material field starts filled in rather than leaving you to
-guess — and one EasyPDM has never seen is added to the materials catalog automatically, so
-you can pick it again and filter by it. That is
-what makes dropping the name from the file name practical: the name still travels with the
-document, just not in its file name.
+SolidWorks 和 Inventor 宏还会把条目名称写入一个名为 `EasyPDM_Name` 的文档属性，这样你的工程图模板和标题栏就可以直接引用它。两者还会自动填写**质量和材料**：宏把它们写入文档、读回来，并放到 EasyPDM 的条目上。在 SolidWorks 中，这两个属性保存的是 SolidWorks 表达式而不是数值，因此会随模型自动保持最新；在 Inventor 中，它们是上传那一刻的快照。材料也会在浏览器打开创建条目时一并带过去，所以"材料"字段一开始就已填好，而不是让你去猜——如果该材料 EasyPDM 从未见过，它会自动加入材料目录，方便下次选用并按它筛选。这正是"从文件名中去掉名称"得以实用的原因：名称仍然随文档走，只是不再放在文件名里。
 
-The FreeCAD macro sends the **material and mass of a part** as well. FreeCAD stores no mass,
-so the macro computes it from the volume and the density of the material assigned to the
-part, at the moment of upload; send the part again after changing it to refresh the value.
-Assemblies are skipped, and a part whose solids have different materials, or one without a
-material, gets no value rather than a wrong one. The macro also names the part's solid and an assembly's links after their items in the PDM, so inserting a component no longer means choosing between "Body" and "Body001".
+FreeCAD 宏同样会发送**零件的材料和质量**。FreeCAD 本身不存储质量，宏在上传那一刻由零件的体积和所分配材料的密度计算得出；修改零件后重新发送一次即可刷新该值。装配体跳过此项；实体材料不一致、或没有材料的零件，宁可不填，也不填一个错误的值。宏还会用 PDM 中的条目名来命名零件的实体和装配体的链接，这样插入组件时再也不用在 "Body" 和 "Body001" 之间纠结。
 
-**Download** — you click Download, and in the browser you point to the Part/Assembly to
-fetch. For an assembly, the ENTIRE component tree is fetched right away, and the main
-file opens automatically in the CAD program. A current drawing, if there is one, is saved
-next to the model file without being opened.
+**下载** —— 点击下载，在浏览器中指定要取回的零件/装配体。若是装配体，则立刻取回整棵组件树，主文件在 CAD 软件中自动打开。如果存在当前版次的工程图，它会保存在模型文件旁边（不会被打开）。
 
-## Working in the browser
+## 在浏览器中工作
 
-### Projects and structure
+### 项目与结构
 
-Every project has a tree: Folders (plain containers for organizing), Parts and
-Assemblies (have a number/status/revision), and Other files (any document with no
-structure of its own underneath). An Assembly can contain Parts and other Assemblies
-(BOM) — the same component can be used in several assemblies and projects at once, so a
-change in one place is visible everywhere that component is used. Folders and files can be
-shared the same way: one datasheet can sit in several folders, and "Existing item" in the
-add dialog brings back anything that was taken out of the structure.
+每个项目都有一棵树：文件夹（用于组织的纯容器）、零件和装配体（拥有编号/状态/版次）、其他文件（自身没有下层结构的任意文档）。一个装配体可以包含零件和其他装配体（BOM）——同一组件可以同时用在多个装配体和多个项目中，因此在一处修改，所有使用它的地方都能看到。文件夹和文件也能以同样的方式共享：一份规格书可以同时放在多个文件夹里；添加对话框中的"现有条目"可以把之前移出结构的条目找回来。
 
-An item can be **detached from the structure** (stays in the database, only disappears
-from the one spot in the tree you clicked — any other places it is used are left alone) or **deleted completely** (administrator only). Deleting an
-Assembly removes just that Assembly — its components stay, losing only that one BOM
-entry, because an Assembly merely *uses* its parts while a Folder *owns* its contents.
-Deleting a Folder therefore does take its contents with it, minus anything that also
-sits somewhere outside it. A Part/Assembly can also be **duplicated** — the copy gets its
-own number and lands right next to the original, with its properties copied over.
+条目可以**从结构中移除**（保留在数据库中，只是从你在树中点击的那个位置消失——它在其他地方的使用不受影响），或**彻底删除**（仅限管理员）。删除装配体只删除该装配体本身——它的组件保留，只是失去那一条 BOM 记录，因为装配体只是*使用*它的零件，而文件夹是*拥有*其内容。因此删除文件夹会带走其内容，但那些同时存在于文件夹之外的内容除外。零件/装配体也可以**复制**——副本获得自己的编号，落在原件旁边，属性一并复制过来。
 
-Both kinds of removal also work on **several items at once**. Select them with
-**Ctrl+click** on a tree row (or with the "Select multiple" button and checkboxes, if the
-mouse suits you better); the bar at the top then shows how many are selected and lets you
-remove them from the structure, delete them completely, tag them or change their status.
-Removing several works exactly like removing one: the items stay in the database and
-remain findable under "Whole database".
+两种移除也都支持**一次处理多个条目**。在树行上按住 **Ctrl+点击** 选择（或者用"多选"按钮和复选框，如果你更习惯用鼠标）；顶部栏会显示已选数量，并允许你把它们移出结构、彻底删除、打标签或更改状态。批量移除的规则与单个完全相同：条目保留在数据库中，仍然可以在"全库"下找到。
 
-A finished project can be **closed** with one button in the toolbar — it drops out of the
-project selector and the "add item" picker, but nothing else about it changes: its items
-stay fully searchable through "Whole database", and the same button opens it again.
+一个已完成的项目可以在工具栏一键**关闭**——它从项目选择器和"添加条目"选择器中消失，其余一切不变：它的条目仍可通过"全库"完整检索，同一个按钮可以再次打开它。
 
-A project itself can also be deleted (administrator only) — this does NOT delete its
-Parts/Assemblies: they become project-less and stay fully intact (files, attachments,
-tags, history, BOM relations), reachable afterward through "Whole database".
+项目本身也可以删除（仅限管理员）——这**不会**删除其中的零件/装配体：它们变为无项目状态且完整保留（文件、附件、标签、历史、BOM 关系），之后可通过"全库"访问。
 
-### Order documents and who runs the project
+### 订单文件与项目对接人
 
-Next to the project's own properties sit the documents that come with the job: a **quote**
-and an **order confirmation** each have their own slot, plus an open category for
-everything else (correspondence, the client's specifications, meeting notes). The two
-named slots take several files rather than replacing the previous one — a quote gets
-revised and re-sent, and the earlier version is worth keeping — and every file shows when
-it was uploaded and by whom.
+在项目自身属性旁边，是随订单而来的文件：**报价单**和**订单确认**各有独立的槽位，另有一个开放类别存放其他一切（往来函件、客户规范、会议纪要）。两个具名槽位保存多个文件而不是替换前一个——报价单会被修订并重发，旧版本值得保留——并且每个文件都显示上传时间和上传人。
 
-A project can also name the **person leading it on the client's side**, picked from that
-client's contacts (either the client's own, or one belonging to the specific Name 2 the
-project is linked to). A button next to the field shows their phone, e-mail and position
-without leaving the project.
+项目还可以指定**客户方的项目对接人**，从该客户的联系人中挑选（客户本身的联系人，或项目所关联的特定"名称 2"的联系人）。字段旁的一个按钮可以在不离开项目的情况下显示其电话、邮箱和职位。
 
-### Parts and Assemblies — kinds and properties
+### 零件和装配体——种类与属性
 
-A Part has one of four **kinds**, each with a different set of fields:
+一个零件属于四种**种类**之一，每种有不同的一组字段：
 
-| Kind | Additional fields |
+| 种类 | 附加字段 |
 |---|---|
-| Manufactured | Material, Price, Additional notes |
-| Purchased | Manufacturer, Series/Type, Subtype, Order number 1/2, Price, Additional notes |
-| Standard | Material, Norm, Additional notes |
-| Client-supplied | Client, Name 2, Additional notes |
+| 自制件 (Manufactured) | 材料、价格、补充说明 |
+| 外购件 (Purchased) | 制造商、系列/型号、子类、订货号 1/2、价格、补充说明 |
+| 标准件 (Standard) | 材料、标准、补充说明 |
+| 客供件 (Client-supplied) | 客户、名称 2、补充说明 |
 
-**Mass** sits above those, because it is the one field every kind shares — a Part of any
-kind and an Assembly alike. The CAD macros fill it in on upload, and changing an item's kind
-leaves it alone.
+**质量**位于其上方，因为它是所有种类共享的字段——任何种类的零件和装配体都是如此。CAD 宏在上传时填写它，更改条目种类不会动它。
 
-An Assembly has one of three **kinds**: Manufactured, Purchased (Manufacturer,
-Series/Type and Subtype) or Client-supplied (Client). Whatever the kind, it can also carry
-any custom properties of its own.
+一个装配体属于三种**种类**之一：自制（Manufactured）、外购（Purchased，含制造商、系列/型号和子类）或客供（Client-supplied，含客户）。无论哪种种类，它同样可以携带任意自定义属性。
 
-**Client** — for the Client-supplied kind, picked from the same catalog as the Clients tab.
-Next to it, **Name 2** — one of that client's second names/trade variants from the catalog
-(a client can have several, e.g. different subsidiaries) — locked until you pick a client.
+**客户** —— 供客供件种类使用，从与"客户"标签页相同的目录中挑选。它旁边的**名称 2** —— 该客户在目录中的第二名称/贸易变体之一（一个客户可以有多个，例如不同的子公司）——在选定客户之前锁定。
 
-**Series/Type** is an entry from the chosen manufacturer's list (Manufacturers tab), and
-**Subtype** narrows it down within that series (e.g. series "Cylindrical roller bearings"
-→ subtypes NU/NJ/NUP), both shown side by side. Series/Type is locked until you pick a
-manufacturer, and Subtype until you pick a series; changing the manufacturer or the series
-clears whatever is below.
+**系列/型号**是来自所选制造商列表（"制造商"标签页）中的一个条目，**子类**在该系列内进一步细分（例如系列"圆柱滚子轴承"→ 子类 NU/NJ/NUP），两者并排显示。系列/型号在选择制造商之前锁定，子类在选择系列之前锁定；更换制造商或系列时，其下层已选内容会被清空。
 
-**How the number looks** is set once, in Settings → Numbering: each kind can get its own
-letter prefix (say `C` for client-supplied parts), numbers can be zero-padded to a fixed
-width, and the item's own name can be dropped from the record name altogether — so an item
-reads `C0001(plate)`, or just `C0001`, instead of `1(plate)`. All three are stamped onto
-an item when it is created and never recalculated afterwards — the CAD macros build each
-file's name out of that number, so changing it later would leave the files on disk saying
-something different. Worth setting before the first real item, then. The one exception is
-an early mistake: correcting a Part's kind also corrects its prefix — but only while its
-CAD/drawing/PDF/3D slots are still empty. Once a file is in one of them the kind is fixed
-too, since the file on disk already carries the number that the kind decides.
+**编号的外观**在 设置 → 编号规则 中一次性设定：每种种类可以有各自的字母前缀（比如客供件用 `C`），编号可以零填充到固定宽度，条目自身的名称可以完全不出现在记录名中——这样条目显示为 `C0001(plate)` 或仅 `C0001`，而不是 `1(plate)`。这三项在条目创建时即被烙上，之后不再重新计算——CAD 宏用该编号构建每个文件的文件名，事后更改会导致磁盘上的文件与记录说法不一。所以值得在创建第一个真实条目之前就设置好。唯一的例外是早期纠错：更正零件的种类也会同时更正其前缀——但仅当其 CAD/图纸/PDF/3D 槽位仍为空时。一旦其中任一槽位有文件，种类也随之固定，因为磁盘上的文件已经带着由种类决定的编号。
 
-### The model preview
+### 模型预览
 
-Above an item's properties sits a preview box with a **2D/3D** switch: 2D shows the PDF
-drawing, 3D shows a **picture of the model** that the CAD macro takes when you upload.
+条目属性上方是一个带 **2D/3D** 切换的预览框：2D 显示 PDF 图纸，3D 显示一张**模型图片**，由 CAD 宏在上传时截取。
 
-That picture replaces what used to happen here. The STEP file was downloaded and rendered in
-your browser every time you opened an item — which produced a still image anyway, since there
-was never anything to rotate. It was slow, it got slower the more detailed the model was
-(regardless of how small the file looked), and it made the whole machine struggle when the
-server ran on the same computer. Taking one picture at upload time, on the machine that
-already has the model open, does the same job once instead of over and over.
+这张图片取代了过去在这里的做法。以前每次打开条目都要下载 STEP 文件并在浏览器中渲染——反正最终也只是得到一张静态图片，因为本来就没有什么可旋转的。它很慢，模型越精细就越慢（无论文件看起来多小），而且当服务器就跑在同一台电脑上时，它会让整台机器都很吃力。在上传时、在本来就打开着模型的机器上拍一张图，把同样的活儿只干一次，而不是一遍又一遍。
 
-Two things follow from that:
+由此带来两件事：
 
-- **The picture comes with the STEP.** If you clear "Export and upload STEP model" in the
-  upload window, there is no picture either, and the box tells you so.
-- **Deleting the STEP deletes the picture.** It only ever depicted that model.
+- **图片随 STEP 而来。** 如果在上传窗口中取消勾选"导出并上传 STEP 模型"，图片也不会有，预览框会说明这一点。
+- **删除 STEP 会删除图片。** 它本来就只描绘那个模型。
 
-The STEP file itself is unchanged — exported, uploaded and downloadable exactly as before. It
-simply no longer has to be rendered to show you what the part looks like. Items uploaded
-before this version keep their STEP but show no picture until you send them up again.
+STEP 文件本身不变——照旧导出、上传、可下载。只是不再需要为了"看看这个零件长什么样"而去渲染它。在此版本之前上传的条目保留其 STEP 但不显示图片，直到你重新发送一次。
 
-For large models the upload window warns you before you confirm: exporting a STEP happens
-inside your CAD program, and for a big assembly that can take minutes with the program busy
-throughout.
+对于大型模型，上传窗口会在你确认之前给出警告：STEP 导出发生在你的 CAD 软件内部，对于大型装配体，这可能耗时数分钟且期间软件一直被占用。
 
-### Sending an assembly
+### 发送装配体
 
-The macro needs one form per new component. It no longer opens a browser tab for each of them, and no longer asks you to click OK before each one: the tab you already have open picks the request up and shows the form in place. On an assembly with forty parts that used to be forty clicks and forty tabs. The form for the main assembly, which comes last, appears in the same tab.
+宏为每个新组件需要一个表单。它不再为每个组件单独开一个浏览器标签页，也不再要求你逐个点击确定：你已打开的那个标签页会接收请求并就地显示表单。对一个有四十个零件的装配体，过去是四十次点击和四十个标签页。主装配体（最后处理）的表单也出现在同一个标签页里。
 
-If no browser is open, the macro notices within a few seconds and falls back to the old way — a message and a new tab — so nothing is lost either way.
+如果没有浏览器打开着，宏会在几秒内察觉并回退到旧方式——一条消息加一个新标签页——因此无论哪种情况都不会丢失内容。
 
-### Watching an upload or a download
+### 观察上传或下载
 
-While a macro is sending files to the PDM or fetching them back, the app shows a list of those files on the right. Each one is ticked off as it completes, the one in progress spins, and a counter says "3 of 7". If something fails it is marked in red and the rest carries on. An assembly's list is laid out like its tree — sub-assemblies and parts indented under the assembly they belong to — and a part used in several places is listed under each of them; it is still sent once, so all its rows tick off together. Once an assembly and everything under it is done, it folds into one line with a "+N" count, so the list keeps showing what is still in progress; a failure keeps its branch open. A single part gets the list too, with one line.
+宏向 PDM 发送或取回文件期间，应用会在右侧显示这些文件的清单。每完成一个就打一个勾，正在进行的那个转圈，计数器显示"7 个中的 3 个"。某个失败了则标红，其余继续。装配体的清单按它的树来排布——子装配体和零件缩进在它们所属的装配体之下——一个在多处使用的零件会在每个使用位置各列一行；它仍然只发送一次，所以所有行一起打勾。当一个装配体及其下所有内容都完成时，它折叠成一行并带一个"+N"计数，这样清单持续显示仍在进行的内容；失败的话则保持其分支展开。单个零件也有清单，只有一行。
 
-The list's **Cancel** button stops the rest of the transfer, after asking you to confirm. Whatever has gone through stays; the macro stops before the next file, so the one already on its way is finished first. A form from the macro that is waiting on screen goes away, and the notifications get a report of how far it got.
+清单的**取消**按钮会在向你确认后停止剩余的传输。已经传完的部分保留；宏在下一个文件之前停下，因此正在途中的那个会先完成。宏在屏幕上等待的表单会消失，通知里会收到一份进行到何处的报告。
 
-This matters most for an assembly. Sending one used to be a wait with nothing to look at — no way to tell whether the macro was on the second component or the last, or which file it was working on. The list appears about a second after the macro starts and stays for a moment at the end with everything ticked, which is your confirmation that the whole thing went up.
+这一点对装配体最为重要。发送装配体曾是一段无从观看的等待——无法判断宏是处理到第二个组件还是最后一个，也看不到它正在处理哪个文件。清单在宏启动约一秒后出现，结束时停留片刻且全部打勾——这就是整个上传完成的确认。
 
-It behaves identically from SolidWorks, Inventor and FreeCAD, and in both directions. If the connection drops or the server restarts mid-way, the list simply stops updating — the upload or download itself carries on untouched.
+它在 SolidWorks、Inventor 和 FreeCAD 中的表现完全一致，两个方向也一样。如果连接中断或服务器中途重启，清单只是停止更新——上传或下载本身不受影响地继续。
 
-### Status and revisions
+### 状态与版次
 
-Parts/Assemblies move through four statuses: **in progress → under review → released**,
-plus **→ cancelled** from released (for an item that turns out not to be needed). In
-status "in progress" everything can be edited; outside of it, the name and properties are
-locked (price is always editable) and the item is always released (no owner). Going back
-from "released" OR "cancelled" to "in progress" bumps the revision by one letter
-(A → B → C...) and lets you add a comment on what changed. An assembly with a cancelled
-item anywhere in its BOM (even deeply nested) can't itself become "released" — the attempt
-shows which item is cancelled. In the tree/list, a cancelled item's icon turns red. At the
-bottom of an item's panel you can see the full **history**: who created it, every status
-change, every revision with its comment, every added/removed attachment, every
-lock/release.
+零件/装配体经历四种状态：**进行中 → 审核中 → 已发布**，外加从已发布转出的 **→ 已作废**（用于最终不需要的条目）。状态为"进行中"时一切可编辑；在其他状态下，名称和属性被锁定（价格始终可编辑），并且条目总是处于解锁状态（无所有者）。从"已发布"或"已作废"退回"进行中"会使版次前进一个字母（A → B → C…），并让你添加一条变更说明。BOM 中（哪怕深层嵌套）任何一个组件被作废的装配体自身不能变为"已发布"——尝试时会指出是哪个组件被作废。在树/列表中，被作废条目的图标变红。在条目面板底部，你可以看到完整的**历史**：谁创建了它、每一次状态变更、每一个版次及其说明、每一次附件的增删、每一次锁定/解锁。
 
-By default anyone with access to an item can release it, its author included. Where a
-second pair of eyes is wanted, an administrator can switch on **"Only an administrator can
-set the Released status"** under Settings → Users: the author then sends the item for
-review, and an administrator releases it.
+默认情况下，任何能访问条目的人（包括其作者）都可以发布它。在需要第二双眼睛把关的地方，管理员可以在 设置 → 用户 中开启 **"仅管理员可设置'已发布'状态"**：作者把条目送去审核，由管理员发布。
 
-An **Assembly can't get ahead of its own bill of materials**. It goes "under review" only
-once every component one level below it is at least under review, and "released" only once
-every one of them is released. Only the direct children are checked — what sits deeper is
-guarded by the same rule applied to the sub-assembly when its turn comes, so the message
-always names something you can see on screen. If a component is behind, the status change
-is offered rather than refused: a window lists exactly which ones and asks whether to move
-them along with the assembly. Declining changes nothing; accepting moves the components
-first and the assembly second, in one go, and each moved component gets its own history
-entry. Two cases stop short of that offer — a **sub-assembly** that is behind has a bill of
-materials of its own, so it is named and left for you to handle separately, and a component
-that is **cancelled, locked by someone else, or in a project you can't access** is named
-together with the reason, untouched.
+**装配体不能跑在自己的物料清单前面。** 只有当它下一层的每个组件都至少处于"审核中"时，它才能进入"审核中"；只有当它们全部"已发布"时，它才能"已发布"。只检查直接子项——更深层的内容由同一规则在子装配体轮到它时把关，因此提示总是指向你屏幕上可见的东西。如果有组件滞后，状态变更不是被拒绝，而是被主动提供：一个窗口确切列出是哪些组件，并询问是否让它们随装配体一起推进。拒绝则什么也不变；接受则先移动组件再移动装配体，一次完成，每个被移动的组件都有自己的历史记录。有两种情况不会给出该提议——一个滞后的**子装配体**有自己的 BOM，因此只点名让你另行处理；而一个**已作废、被他人锁定、或位于你无权访问的项目中**的组件，会连同原因一起被点名，保持不动。
 
-### Client verification
+### 客户确认
 
-Once a Part/Assembly is **released**, a "Client verification" button in the toolbar opens
-the running record of what the client said about it. Each entry carries a result —
-**Verified**, **Needs work**, or no result at all, which simply means it went out and you
-are waiting — an optional comment, and its own attachments, for example the confirming
-e-mail. Entries accumulate, so a round of remarks followed by an acceptance stays readable
-as history, with who added it and when.
+一旦零件/装配体**发布**，工具栏中的"客户确认"按钮会打开客户对它反馈的完整记录。每条记录带有一个结果——**已确认**、**需返工**，或没有结果（仅表示已送出、正在等待）——可选的说明，以及各自的附件，例如确认邮件。记录不断累积，因此一轮意见加一次接收始终可以当作历史来读，带有添加人和时间。
 
-The project panel shows the whole thing split into three tables (needs work, in progress,
-verified), each row with a button that jumps straight to that item in the structure. The
-latest result also shows as a badge in the item's own panel, with the date and the revision
-it covered. When a verdict arrives, the person who created the item gets a notification.
+项目面板把它分成三张表展示（需返工、进行中、已确认），每一行都带一个按钮，直接跳转到结构中的那个条目。最新结果还会以徽章的形式显示在条目自己的面板上，带有日期和它所覆盖的版次。结论到达时，创建该条目的人会收到通知。
 
-Verification belongs to the item **in that project**, not to the item alone: the same Part
-used for two customers is accepted by two different people, so each project keeps its own
-record, and none of it shows up in "Whole database", where there is no project context.
-Each entry also remembers which revision it covered — after a new revision is released, the
-old acceptance stays visible but is clearly marked as no longer covering what the item is
-now.
+确认归属于**该项目中的**条目，而不是条目本身：同一个零件用于两个客户时，由两个不同的人来接收，因此每个项目保留自己的记录，而且这些记录都不会显示在"全库"中——那里没有项目语境。每条记录还记住它覆盖的是哪个版次——新版次发布后，旧的接收记录仍然可见，但会被明确标记为不再覆盖该条目当前的内容。
 
-### Who's editing — item locking
+### 谁在编辑——条目锁定
 
-The creator of a Part/Assembly immediately becomes its owner, and the item is locked —
-while the lock lasts, only the owner can edit its properties (not even an administrator
-bypasses this). An administrator can, however, take over or release someone else's lock
-and change a locked item's status — e.g. when a coworker is away and their unfinished
-item needs to be unblocked. In the tree this is shown by the color of the lock icon:
-green — locked by you, yellow — by someone else, open — released (anyone can lock it).
-A released item is always released (unlocked).
+零件/装配体的创建者立即成为它的所有者，条目随即被锁定——锁定期间，只有所有者能编辑其属性（连管理员也不能绕过这一限制）。不过，管理员可以接管或解除他人的锁、更改被锁定条目的状态——例如同事不在场、而其未完成的条目需要解锁时。在树中通过锁图标的颜色来体现：绿色——你锁定的，黄色——他人锁定的，开启——已解锁（任何人都可以锁定它）。一个已解锁的条目总是处于解锁状态。
 
-### Bill of materials (BOM)
+### 物料清单（BOM）
 
-An Assembly shows the list of its components: position, name, quantity, material, norm,
-manufacturer, order numbers — together with the components of nested assemblies. The
-position order can be changed by dragging or by typing a number directly. CSV export
-comes in two variants: full (every occurrence listed separately) or aggregated (the same
-component used several times — one row with the combined quantity).
+装配体会显示其组件清单：位置、名称、数量、材料、标准、制造商、订货号——连同嵌套装配体的组件一起。位置顺序可以通过拖拽、或直接输入数字来调整。CSV 导出有两种变体：完整（每一次出现单独列出）或汇总（同一组件多次使用——合并数量后为一行）。
 
-The reverse view is also available — **Used in**: an item's detail panel shows every
-assembly, at any depth and across projects, that contains it, with a button to jump
-straight there.
+反向视图也可用——**用于**：条目详情面板会显示任何深度、跨项目的每一个包含它的装配体，并带一个直接跳转过去的按钮。
 
-### Materials, Manufacturers and Clients
+### 材料、制造商与客户
 
-Separate, company-wide catalogs (the **Materials list**, **Manufacturers** and
-**Clients** tabs in the main menu) — a material has a name and group/subgroup, a
-manufacturer has a name, contact people and a Series/Type + Subtype list of what it
-supplies. You pick them from a list when filling in a Part's/Assembly's properties,
-instead of typing them in by hand.
+独立的全公司目录（主菜单中的**材料清单**、**制造商**和**客户**标签页）——材料有名称和组/子组；制造商有名称、联系人，以及它所供产品的 系列/型号 + 子类 列表。填写零件/装配体属性时从列表中挑选，而不是每次手动输入。
 
-The **Processes** menu holds the company's processes — laser cutting, bending, welding,
-hardening — each with a description and a choice of whether it applies to parts, assemblies
-or both. The same name can appear several times with different descriptions: "Hardening, up
-to 50 HRC" and "Hardening, induction" are one process with two specifications. A
-manufactured Part or Assembly picks any number of them, or none: click the field to choose
-from the list, or type to narrow it by name or description. The picked processes are listed
-under the field with their descriptions, each with an × to remove it. An item keeps the name and
-description it picked, so a released part keeps the specification it was released with
-even if the catalog changes later. The chosen processes also appear as a column in the bill
-of materials and in both CSV exports. The catalog itself can be filtered by text and by
-whether a process applies to parts or assemblies.
+**工艺**菜单存放公司的工艺——激光切割、折弯、焊接、淬火——每个工艺带描述，以及它适用于零件、装配体还是两者兼有的选择。同一名称可以出现多次、描述不同："淬火，最高 50 HRC"和"淬火，感应"是同一工艺的两种规格。自制零件或装配体可以选任意数量的工艺，也可以一个都不选：点击字段从列表中选择，或输入文字按名称或描述过滤。所选的工艺连同描述列在字段下方，每个都带一个 × 可移除。条目保留它选取时的名称和描述，即使日后目录变更，一个已发布的零件也保留它发布时的规格。所选的工艺还会作为一列出现在物料清单和两种 CSV 导出中。目录本身可以按文本、以及工艺适用于零件还是装配体来过滤。
 
-A **Client** has a name (plus an optional location), a list of second names/trade variants
-(add as many as you need — typing an existing client's name into "Add client" switches to
-adding it a new one instead of creating a duplicate), its own contact people, and its own
-document tree for e.g. norms or reference files — separate from project files. A Project
-can optionally be linked to a Client — and, when that client has several, to one specific
-Name 2. The project selector then shows "Project (Client, Name 2)", and the client's detail
-panel lists every Project assigned to it, with a button to jump straight there.
+一个**客户**有名称（可选地点）、一份第二名称/贸易变体列表（按需添加——在"添加客户"中输入一个已有客户的名称，会转为为它添加一个新的变体，而不是创建重复客户）、自己的联系人，以及自己的文档树（例如规范或参考文件）——与项目文件分开。一个项目可以选择关联到某个客户——当该客户有多个"名称 2"时，还可以关联到其中具体的某一个。项目选择器随之显示"项目（客户，名称 2）"，客户详情面板列出被指派给它的每个项目，并带一个直接跳转过去的按钮。
 
-### Documentation languages
+### 文档语言
 
-Documentation languages are separate from the interface language each person picks for
-themselves. Under **Settings → Language** an administrator keeps the list of languages the
-company documents in — a full name and a code of up to three capital letters; the list
-starts with English (EN) and Polish (PL) — and chooses the default documentation language.
+文档语言与每个人自选的界面语言相互独立。在 **设置 → 语言** 中，管理员维护公司文档所用的语言列表——完整名称和最多三个大写字母的代码；列表初始包含英语（EN）和波兰语（PL）——并选择默认文档语言。
 
-Every project has a **main language**, the default one when the project is created, and
-can be marked **multilingual** with the languages its documentation is written in; both
-are set in the project properties. The add-item dialog names the project's language in its
-title, so it is clear which language the new item is described in.
+每个项目有一个**主语言**，即项目创建时的默认语言，并且可以用其文档所用的语言标记为**多语言**；两者都在项目属性中设置。添加条目对话框会在标题中注明项目的语言，新条目用什么语言描述一目了然。
 
-**Processes** are entered in the default documentation language, and a button next to each
-opens its translations: the default version on top and one other language at a time below,
-picked from a list that shows which are already translated. The catalog follows the
-default language and marks processes still without a translation. A part or assembly keeps
-its processes in every language and shows them in its project's main language — in the
-item panel, the bill of materials and both CSV exports.
+**工艺**以默认文档语言录入，每个工艺旁边有一个按钮打开它的翻译：上方是默认版本，下方每次显示一种其他语言，从显示哪些已翻译的列表中选择。目录跟随默认语言，并标记尚无翻译的工艺。零件或装配体在每种语言中都保留自己的工艺，并以其项目的主语言显示——在条目面板、物料清单和两种 CSV 导出中都是如此。
 
-A **part or assembly name** is translated through the button to the left of the name
-field. When adding a new item, the name field suggests names existing parts or assemblies
-already have in the project's language, and picking one brings its translations along — a
-second "Kostka" arrives with its "Cube".
+**零件或装配体名称**通过名称字段左侧的按钮翻译。添加新条目时，名称字段会建议现有零件/装配体在项目语言中已有的名称，选中其一即连带其翻译一起带过来——第二个"Kostka"会带着它的"Cube"一起来。
 
-### Search and the whole database
+### 搜索与全库
 
-The **Whole database** tab searches all items regardless of project — by name, number,
-tags, kind. Several tags can be ticked at once; the list then shows the items that carry all
-of them. Found filters can be saved for reuse, and a "Clear filters" button resets
-everything at once.
+**全库**标签页不分项目搜索所有条目——按名称、编号、标签、种类。可以同时勾选多个标签；列表随后显示同时携带全部所选标签的条目。找到的筛选可以保存复用，"清除筛选"按钮一键重置全部。
 
-Tags are typed freely, so typos and labels nobody uses any more pile up. An administrator
-sees every tag in **Settings → Tags**, with how many items carry it, and can filter for the
-unused ones. Deleting a tag there removes it from all items at once, released ones
-included, and from the suggestions and the filter.
+标签可以自由输入，因此错别字和没人再用的标签会堆积起来。管理员在 **设置 → 标签** 中看到每一个标签及有多少条目携带它，并可以筛选出未使用的。在那里删除一个标签，会立刻把它从所有条目（包括已发布的）以及建议和筛选中移除。
 
-### Downloadable documentation
+### 可下载的文档
 
-From a Project, Assembly or Part you can download the complete set of attached files as
-a ZIP (choosing which file extensions to include) — handy for e.g. sending a complete
-set of drawings to a client.
+从项目、装配体或零件，你可以把其附带的全部文件打包为 ZIP 下载（可以选择包含哪些文件扩展名）——例如要把一整套图纸发给客户时很方便。
 
-### Notifications
+### 通知
 
-A bell icon (top right, next to your name) shows a list of events: an item you own
-waiting for review, released, or reverted to "In progress", a new revision on your
-item, a client verification result (remarks or acceptance) on an item you created,
-being assigned to or removed from a project, an assigned project being deleted,
-your password being changed by an administrator, or (administrators only) low disk
-space on the file storage. A CAD macro run that has finished also leaves a report here:
-how many files went up or came down, which ones failed, and which were skipped because
-they were already in the PDM. Each notification can be marked as read or deleted
-individually, and each type can be turned off in Settings → Notifications.
+铃铛图标（右上角，你的名字旁）显示一份事件列表：你所有的条目等待审核、已发布、或被退回"进行中"，你的条目出现新版次，你所创建条目的客户确认结果（意见或接收），你被指派到或移出某个项目，被指派的项目被删除，管理员修改了你的密码，以及（仅管理员）文件存储磁盘空间不足。一次 CAD 宏运行结束后，这里也会留下一份报告：多少文件上传或下载、哪些失败了、哪些因为已在 PDM 中而被跳过。每条通知可以单独标记为已读或删除，每种类型可以在 设置 → 通知 中关闭。
 
-## Accounts and access
+## 账户与访问
 
-Two roles: **administrator** (full access, sees all projects, manages accounts and
-server settings) and **user** (sees and works only in the projects they've been assigned
-to). Everyone manages their own interface language (Polish/English/German) and
-light/dark theme in Settings.
+两种角色：**管理员**（完全访问，可见所有项目，管理账户与服务器设置）和**用户**（只可见、并且只在其被指派的项目中工作）。每个人在设置中管理自己的界面语言（波兰语/英语/德语）和浅色/深色主题。
 
-Every account has a **first and last name**, separate from the display name and meant for
-drawing title blocks. Both are required when an account is created; Settings → Users marks
-accounts that still lack them, and the edit button next to an account fills them in.
+每个账户都有**姓和名**，与显示名分开，供图纸标题栏使用。创建账户时两者都必填；设置 → 用户 会标记仍缺少它们的账户，账户旁的编辑按钮可以补填。
 
-**Settings → Company** (administrators) holds the company name and logo — PNG or JPEG,
-ideally square — for the drawing title block.
+**设置 → 公司**（管理员）保存公司名称和标志——PNG 或 JPEG，最好是方形——供图纸标题栏使用。
 
-## For administrators and developers
+## 面向管理员与开发者
 
-Server installation (Docker / Linux / Windows), architecture, the full list of API
-endpoints, and known limitations — see [`TECHNICAL.md`](TECHNICAL.md).
+服务器安装（Docker / Linux / Windows）、架构、完整的 API 端点列表以及已知限制——见 [`TECHNICAL.md`](TECHNICAL.md)（英文）。
