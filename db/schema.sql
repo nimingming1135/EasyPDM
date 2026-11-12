@@ -144,7 +144,10 @@ CREATE TABLE project_languages (
 CREATE UNIQUE INDEX project_languages_name_lower_idx ON project_languages (lower(name));
 CREATE UNIQUE INDEX project_languages_one_default_idx ON project_languages (is_default) WHERE is_default;
 
-INSERT INTO project_languages (name, code, is_default) VALUES ('English', 'EN', true), ('Polish', 'PL', false);
+-- 默认文档语言设为简体中文（本 fork nimingming1135/EasyPDM 面向中文用户）。
+-- 约束 project_languages_one_default_idx 保证同一时刻只能有一个 is_default=true，
+-- 因此 English 降为 false。新增项目/企业级默认文档语言将使用中文。
+INSERT INTO project_languages (name, code, is_default) VALUES ('Chinese (Simplified)', 'ZH', true), ('English', 'EN', false), ('Polish', 'PL', false);
 
 -- Języki projektu: główny (każdy projekt, domyślnie język domyślny z chwili utworzenia) oraz
 -- czy projekt jest wielojęzyczny i w jakich językach (lista zawiera też główny; jednojęzyczny

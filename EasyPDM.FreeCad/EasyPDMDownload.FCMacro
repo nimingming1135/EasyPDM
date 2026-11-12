@@ -126,7 +126,7 @@ def _detect_language():
     if lang:
         return lang
     raw_os = os.environ.get("LANGUAGE") or os.environ.get("LC_ALL") or os.environ.get("LANG") or ""
-    return _match_lang(raw_os) or "en"
+    return _match_lang(raw_os) or "zh"
 
 
 LANG = _detect_language()
@@ -301,6 +301,53 @@ TRANSLATIONS = {
         "item_no_longer_exists": "Das ausgewählte Element existiert nicht mehr.",
         "download_interrupted": "Download durch einen unerwarteten Fehler unterbrochen:\n\n",
         "log_so_far": "\n\nBisheriges Protokoll:\n",
+    },
+    "zh": {
+        "no_connection": "无法连接到 {url}：{reason}",
+        "login_failed_no_session": "登录失败 —— 服务器未返回会话。",
+        "pdm_title": "PDM",
+        "unnamed_fallback": "未命名",
+        "easypdm_title": "EasyPDM",
+        "easypdm_error_title": "EasyPDM —— 错误",
+        "login_dialog_title": "登录到 PDM",
+        "api_address_label": "API 地址：",
+        "username_label": "用户名：",
+        "password_label": "密码：",
+        "login_button": "登录",
+        "cancel_button": "取消",
+        "login_missing_fields": "请输入用户名和密码。",
+        "download_folder_dialog_title": "从 PDM 下载",
+        "logged_in_as": "已登录为：{name}",
+        "logout_button": "退出登录",
+        "account_label": "账户：",
+        "target_dir_label": "目标文件夹：",
+        "choose_download_folder_caption": "选择下载文件夹",
+        "indicate_target_folder": "请选择目标文件夹。",
+        "cannot_use_folder": "无法使用此文件夹：{error}",
+        "logged_out_message": "已退出登录。下次运行宏时会再次要求登录。",
+        "wait_timeout": "等待时间已超时。",
+        "log_cancelled_not_opened": "已在浏览器中取消 —— 已下载的文件保留在文件夹中；文档未打开。",
+        "wait_ticket_status": "EasyPDM：正在等待浏览器中选择条目……",
+        "log_no_attachments_list": "   {label}：获取附件列表失败（{error}）。",
+        "log_no_cad_files": "   {label}：没有可下载的 CAD 文件（该条目无附件）。",
+        "log_already_present": "   {label}：已在文件夹中（当前版次），跳过。",
+        "log_relinked": "   {file}：链接已重新指向本文件夹中的文件（{count} 个）。",
+        "log_relink_failed": "   {file}：无法重新指向链接（{error}）—— 请手动打开并修复。",
+        "newer_revision_title": "较新版次",
+        "log_keeping_local_revision": "   {label}：保留本地现有版次（{rev_list}）。",
+        "log_downloading": "   正在下载 {file}……",
+        "log_download_error": "   {label}：下载 {file} 出错（{error}）。",
+        "log_saved": "   已保存：{file}",
+        "log_no_children_list": "   {label}：获取子组件列表失败（{error}）。",
+        "log_downloading_top": "正在下载 {number}（{name}）到 {dir}……",
+        "log_opened": "已打开：{path}",
+        "log_open_failed": "无法在 FreeCAD 中打开 {path}：{error}",
+        "log_no_main_file": "无法确定要打开的主文件。",
+        "open_browser_failed": "打开浏览器失败：{error}",
+        "fetch_selected_item_failed": "获取所选条目数据失败：{error}",
+        "item_no_longer_exists": "所选条目已不存在。",
+        "download_interrupted": "下载被意外错误中断：",
+        "log_so_far": "\n已记录日志：\n",
     },
 }
 

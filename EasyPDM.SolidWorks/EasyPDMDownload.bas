@@ -149,11 +149,11 @@ Private Function DetectLanguage() As String
         Case &H7
             DetectLanguage = "de"
         Case Else
-            DetectLanguage = "en"
+            DetectLanguage = "zh"
     End Select
     Exit Function
 Fallback:
-    DetectLanguage = "en"
+    DetectLanguage = "zh"
 End Function
 
 Private Function GetLang() As String
@@ -176,11 +176,60 @@ End Function
 ' VBA import, confirmed in practice when this was violated once already).
 ' ============================================================================
 
+Private Function T_ZH(ByVal key As String) As String
+    Select Case key
+        Case "Dl_WrongFormatSuffix": T_ZH = ChrW(&HFF0C) & ChrW(&H9884) & ChrW(&H671F) & " .sldprt/.sldasm " & ChrW(&H6216) & " .ipt/.iam" & ChrW(&HFF09) & ChrW(&H2014) & ChrW(&H2014) & ChrW(&H8DF3) & ChrW(&H8FC7) & ChrW(&HFF0C) & ChrW(&H907F) & ChrW(&H514D) & ChrW(&H6253) & ChrW(&H5F00) & ChrW(&H9519) & ChrW(&H8BEF) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H3002)
+        Case "NoConnectionPrefix": T_ZH = ChrW(&H65E0) & ChrW(&H6CD5) & ChrW(&H8FDE) & ChrW(&H63A5) & ChrW(&H5230) & " "
+        Case "Dl_AlreadyInFolder": T_ZH = ChrW(&HFF1A) & ChrW(&H5DF2) & ChrW(&H5728) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H5939) & ChrW(&H4E2D) & ChrW(&HFF08) & ChrW(&H5F53) & ChrW(&H524D) & ChrW(&H7248) & ChrW(&H6B21) & ChrW(&HFF09) & ChrW(&HFF0C) & ChrW(&H8DF3) & ChrW(&H8FC7) & ChrW(&H3002)
+        Case "Dl_NoAttachments": T_ZH = ChrW(&HFF1A) & ChrW(&H6CA1) & ChrW(&H6709) & ChrW(&H53EF) & ChrW(&H4E0B) & ChrW(&H8F7D) & ChrW(&H7684) & " CAD " & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&HFF08) & ChrW(&H8BE5) & ChrW(&H6761) & ChrW(&H76EE) & ChrW(&H65E0) & ChrW(&H9644) & ChrW(&H4EF6) & ChrW(&HFF09) & ChrW(&H3002)
+        Case "Dl_DownloadingToPrefix": T_ZH = ChrW(&H6B63) & ChrW(&H5728) & ChrW(&H4E0B) & ChrW(&H8F7D) & " "
+        Case "Dl_Opened": T_ZH = ChrW(&H5DF2) & ChrW(&H6253) & ChrW(&H5F00) & ChrW(&HFF1A)
+        Case "Dl_FetchAttachmentsFailed": T_ZH = ChrW(&HFF1A) & ChrW(&H83B7) & ChrW(&H53D6) & ChrW(&H9644) & ChrW(&H4EF6) & ChrW(&H5217) & ChrW(&H8868) & ChrW(&H5931) & ChrW(&H8D25) & ChrW(&H3002)
+        Case "ErrorPrefix": T_ZH = ChrW(&H9519) & ChrW(&H8BEF) & ChrW(&HFF1A)
+        Case "PromptTargetFolder": T_ZH = ChrW(&H76EE) & ChrW(&H6807) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H5939) & ChrW(&HFF1A)
+        Case "Dl_FailedToOpenPrefix": T_ZH = ChrW(&H65E0) & ChrW(&H6CD5) & ChrW(&H6253) & ChrW(&H5F00) & " "
+        Case "Dl_WrongFormatPrefix": T_ZH = ChrW(&HFF1A) & ChrW(&H6807) & ChrW(&H8BB0) & ChrW(&H4E3A) & " CAD " & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H7684) & ChrW(&H9644) & ChrW(&H4EF6) & ChrW(&H6269) & ChrW(&H5C55) & ChrW(&H540D) & ChrW(&H5F02) & ChrW(&H5E38) & ChrW(&HFF08)
+        Case "NewerRevisionPart3": T_ZH = ChrW(&HFF09) & ChrW(&HFF0C) & ChrW(&H4F46) & ChrW(&H670D) & ChrW(&H52A1) & ChrW(&H5668) & ChrW(&H4E0A) & ChrW(&H5F53) & ChrW(&H524D) & ChrW(&H7248) & ChrW(&H6B21) & ChrW(&H4E3A) & " "
+        Case "Dl_FailedToOpenSuffix": T_ZH = ChrW(&HFF08) & ChrW(&H9519) & ChrW(&H8BEF) & ChrW(&H7801) & " "
+        Case "SessionExpiredPrompt": T_ZH = ChrW(&H4F1A) & ChrW(&H8BDD) & ChrW(&H5DF2) & ChrW(&H8FC7) & ChrW(&H671F) & " " & ChrW(&H2014) & ChrW(&H2014) & " " & ChrW(&H8BF7) & ChrW(&H91CD) & ChrW(&H65B0) & ChrW(&H8FD0) & ChrW(&H884C) & ChrW(&H5B8F) & ChrW(&H767B) & ChrW(&H5F55) & ChrW(&H3002)
+        Case "AppTitle": T_ZH = "EasyPDM"
+        Case "Dl_ErrorDownloadingMid": T_ZH = ChrW(&HFF1A) & ChrW(&H4E0B) & ChrW(&H8F7D) & ChrW(&H51FA) & ChrW(&H9519) & " "
+        Case "StatusWaitingForBrowser": T_ZH = "EasyPDM" & ChrW(&HFF1A) & ChrW(&H6B63) & ChrW(&H5728) & ChrW(&H7B49) & ChrW(&H5F85) & ChrW(&H6D4F) & ChrW(&H89C8) & ChrW(&H5668) & ChrW(&H2026) & ChrW(&HFF08) & ChrW(&H6309) & " Esc " & ChrW(&H53D6) & ChrW(&H6D88) & ChrW(&HFF09)
+        Case "SelectedItemLoadFailed": T_ZH = ChrW(&H6240) & ChrW(&H9009) & ChrW(&H6761) & ChrW(&H76EE) & ChrW(&H65E0) & ChrW(&H6CD5) & ChrW(&H52A0) & ChrW(&H8F7D) & ChrW(&H3002)
+        Case "RunLogPrefix": T_ZH = ChrW(&H8FD0) & ChrW(&H884C) & ChrW(&H65E5) & ChrW(&H5FD7) & ChrW(&HFF1A)
+        Case "Dl_DownloadingToMiddle": T_ZH = ChrW(&HFF09) & ChrW(&H5230) & " "
+        Case "TitleDownloadFromPdm": T_ZH = ChrW(&H4ECE) & " PDM " & ChrW(&H4E0B) & ChrW(&H8F7D)
+        Case "TitleNewerRevision": T_ZH = ChrW(&H8F83) & ChrW(&H65B0) & ChrW(&H7248) & ChrW(&H6B21)
+        Case "MustRunInsideSolidWorks": T_ZH = ChrW(&H6B64) & ChrW(&H5B8F) & ChrW(&H5FC5) & ChrW(&H987B) & ChrW(&H5728) & " SolidWorks " & ChrW(&H5185) & ChrW(&H90E8) & ChrW(&H8FD0) & ChrW(&H884C) & ChrW(&H3002)
+        Case "LoggedInAsPrefix": T_ZH = ChrW(&H5DF2) & ChrW(&H767B) & ChrW(&H5F55) & ChrW(&H4E3A) & " "
+        Case "LoginFailedPrefix": T_ZH = ChrW(&H767B) & ChrW(&H5F55) & ChrW(&H5931) & ChrW(&H8D25) & ChrW(&HFF1A)
+        Case "Dl_CouldNotDetermineMainFile": T_ZH = ChrW(&H65E0) & ChrW(&H6CD5) & ChrW(&H786E) & ChrW(&H5B9A) & ChrW(&H8981) & ChrW(&H6253) & ChrW(&H5F00) & ChrW(&H7684) & ChrW(&H4E3B) & ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H3002)
+        Case "NewerRevisionPart1": T_ZH = ChrW(&H6587) & ChrW(&H4EF6) & ChrW(&H5939) & ChrW(&H4E2D) & ChrW(&H5DF2) & ChrW(&H6709) & " "
+        Case "SessionExpiredError": T_ZH = ChrW(&H4F1A) & ChrW(&H8BDD) & ChrW(&H5DF2) & ChrW(&H8FC7) & ChrW(&H671F) & ChrW(&H3002)
+        Case "LoginFailedNoSession": T_ZH = ChrW(&H767B) & ChrW(&H5F55) & ChrW(&H5931) & ChrW(&H8D25) & " " & ChrW(&H2014) & ChrW(&H2014) & " " & ChrW(&H670D) & ChrW(&H52A1) & ChrW(&H5668) & ChrW(&H672A) & ChrW(&H8FD4) & ChrW(&H56DE) & ChrW(&H4F1A) & ChrW(&H8BDD) & ChrW(&H3002)
+        Case "DownloadNewestQuestion": T_ZH = ChrW(&H4E0B) & ChrW(&H8F7D) & ChrW(&H6700) & ChrW(&H65B0) & ChrW(&H7248) & ChrW(&H672C) & ChrW(&HFF1F)
+        Case "ServerErrorPrefix": T_ZH = ChrW(&H670D) & ChrW(&H52A1) & ChrW(&H5668) & ChrW(&H9519) & ChrW(&H8BEF) & ChrW(&HFF08)
+        Case "PromptUsername": T_ZH = ChrW(&H7528) & ChrW(&H6237) & ChrW(&H540D) & ChrW(&HFF1A)
+        Case "Dl_Saved": T_ZH = "  " & ChrW(&H5DF2) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&HFF1A)
+        Case "PromptPassword": T_ZH = ChrW(&H5BC6) & ChrW(&H7801) & ChrW(&HFF08) & ChrW(&H6CE8) & ChrW(&H610F) & ChrW(&HFF1A) & ChrW(&H6B64) & ChrW(&H6846) & ChrW(&H4E0D) & ChrW(&H906E) & ChrW(&H6321) & ChrW(&H8F93) & ChrW(&H5165) & ChrW(&H5B57) & ChrW(&H7B26) & ChrW(&HFF09) & ChrW(&HFF1A)
+        Case "PromptApiAddress": T_ZH = "EasyPDM API " & ChrW(&H5730) & ChrW(&H5740) & ChrW(&HFF1A)
+        Case "Dl_DownloadingPrefix": T_ZH = "  " & ChrW(&H6B63) & ChrW(&H5728) & ChrW(&H4E0B) & ChrW(&H8F7D) & " "
+        Case "Dl_KeepingExistingRevisionPrefix": T_ZH = ChrW(&HFF1A) & ChrW(&H4FDD) & ChrW(&H7559) & ChrW(&H672C) & ChrW(&H5730) & ChrW(&H73B0) & ChrW(&H6709) & ChrW(&H7248) & ChrW(&H6B21) & ChrW(&HFF08)
+        Case "Dl_FetchChildrenFailed": T_ZH = ChrW(&HFF1A) & ChrW(&H83B7) & ChrW(&H53D6) & ChrW(&H7EC4) & ChrW(&H4EF6) & ChrW(&H5217) & ChrW(&H8868) & ChrW(&H5931) & ChrW(&H8D25) & ChrW(&H3002)
+        Case "NewerRevisionPart2": T_ZH = ChrW(&HFF08) & ChrW(&H7248) & ChrW(&H6B21) & " "
+        Case "TitleLoginToPdm": T_ZH = ChrW(&H767B) & ChrW(&H5F55) & ChrW(&H5230) & " PDM"
+        Case "LoggedOutMessage": T_ZH = ChrW(&H5DF2) & ChrW(&H9000) & ChrW(&H51FA) & " EasyPDM" & ChrW(&H3002)
+        Case "CancelledNothingDownloaded": T_ZH = ChrW(&H5DF2) & ChrW(&H53D6) & ChrW(&H6D88) & " " & ChrW(&H2014) & ChrW(&H2014) & " " & ChrW(&H672A) & ChrW(&H4E0B) & ChrW(&H8F7D) & ChrW(&H4EFB) & ChrW(&H4F55) & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3002)
+        Case Else: T_ZH = key
+    End Select
+End Function
+
 Private Function T(ByVal key As String) As String
     Select Case GetLang()
         Case "pl": T = T_PL(key)
         Case "de": T = T_DE(key)
-        Case Else: T = T_EN(key)
+        Case "zh": T = T_ZH(key)
+        Case Else: T = T_ZH(key)
     End Select
 End Function
 

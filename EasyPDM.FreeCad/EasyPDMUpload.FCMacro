@@ -215,7 +215,7 @@ def _detect_language():
     if lang:
         return lang
     raw_os = os.environ.get("LANGUAGE") or os.environ.get("LC_ALL") or os.environ.get("LANG") or ""
-    return _match_lang(raw_os) or "en"
+    return _match_lang(raw_os) or "zh"
 
 
 LANG = _detect_language()
@@ -567,6 +567,57 @@ TRANSLATIONS = {
             "(Die Elemente selbst werden NICHT gelöscht, nur ihre Zuordnung zu dieser "
             "Baugruppe.)"
         ),
+    },
+    "zh": {
+        "no_connection": "无法连接到 {url}：{reason}",
+        "login_failed_no_session": "登录失败 —— 服务器未返回会话。",
+        "pdm_title": "PDM",
+        "unnamed_fallback": "未命名",
+        "login_dialog_title": "登录到 PDM",
+        "api_address_label": "API 地址：",
+        "username_label": "用户名：",
+        "password_label": "密码：",
+        "login_button": "登录",
+        "cancel_button": "取消",
+        "assembly_update_note": "PDM 中处于“进行中”状态的已有文件将被更新（其 CAD 文件替换同一版次）。",
+        "update_step_checkbox": "为 PDM 中已有的文件上传新的 STEP（3D 预览）",
+        "update_pdf_checkbox": "为 PDM 中已有的文件上传新的 PDF",
+        "not_sent_suffix": " —— {status}，将不会被发送",
+        "locked_not_sent": "这些文件将不会被发送 —— 它们在 PDM 中处于阻止更改的状态。要更新它们，请创建新版次或将其移出审核：",
+        "yes_button": "是",
+        "no_button": "否",
+        "login_missing_fields": "请输入用户名和密码。",
+        "target_folder_dialog_title": "发送到 PDM",
+        "logged_in_as": "已登录为：{name}",
+        "logout_button": "退出登录",
+        "account_label": "账户：",
+        "choose_target_folder_caption": "选择目标文件夹",
+        "indicate_folder": "请选择一个文件夹。",
+        "cannot_use_folder": "无法使用此文件夹：{error}",
+        "logged_out_message": "已退出登录。下次运行宏时会再次要求登录。",
+        "new_revision_title": "新版次",
+        "revision_comment_label": "版次备注（可选）：",
+        "revision_comment_placeholder": "此版次改了什么……",
+        "create_revision_button": "创建版次",
+        "assembly_detected_title": "检测到装配体",
+        "already_in_pdm_as": " -> 在 PDM 中已存在，编号 #{number}（{name}）",
+        "export_step_prompt": "是否导出并上传 STEP 模型（3D 预览）？",
+        "export_pdf_prompt": "是否导出并上传 PDF 文件？",
+        "fetch_items_failed": "获取条目列表失败：{error}",
+        "fetch_projects_failed": "获取项目列表失败：{error}",
+        "upload_component_failed": "发送 {file} 失败：{error}",
+        "link_child_failed": "已创建 {child}，但未能在 {parent} 下链接它：{error}",
+        "open_browser_failed": "打开浏览器失败：{error}",
+        "wait_timeout": "等待时间已超时。",
+        "wait_ticket_status": "EasyPDM：正在等待浏览器中填写条目详情……",
+        "no_active_document": "没有打开的文档。",
+        "document_not_saved": "文档尚未保存 —— 请选择保存位置。",
+        "save_failed": "保存文档失败：{error}",
+        "cancelled_upload": "已取消 —— 上传已中止。",
+        "nothing_sent": "已取消 —— 未发送任何内容。",
+        "link_subitem_failed": "无法链接主条目下的某个子项：{error}",
+        "status_label_sprawdzany": "审核中",
+        "status_label_wydany": "已发布",
     },
 }
 

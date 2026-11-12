@@ -14,6 +14,9 @@ dist/
 __pycache__/
 *.pyc
 
+# 本地辅助脚本与中间字典（翻译 CAD 宏中文用，非仓库源码）
+_workfiles/
+
 # Editor
 .vscode/
 
