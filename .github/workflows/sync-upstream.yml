@@ -1,0 +1,55 @@
+name: Sync upstream
+
+# 把上游 pawelcel/EasyPDM 的最新 main 同步到本 fork 的 main 分支，
+# 让 main 成为上游的纯镜像（不含任何中文改动）。
+# 上游改动不会影响 zh-CN 分支 —— zh-CN 由 rebase-zh-CN.yml 独立处理。
+#
+# 注意：GitHub Actions 无法“监听别人的仓库 push”，所以这里用定时任务轮询上游。
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # 每 6 小时一次（分钟取 17，避开整点拥堵）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/pawelcel/EasyPDM.git || true
+          git fetch upstream main --quiet
+
+      - name: Fast-forward main to upstream/main (镜像)
+        id: ff
+        run: |
+          BEFORE=$(git rev-parse --short origin/main)
+          # 如果 main 已经领先于 upstream（理论上不会，因为 main 应是纯镜像），则停止，避免丢失提交
+          if [ "$(git rev-parse upstream/main)" != "$(git merge-base upstream/main origin/main)" ] && \
+             [ "$(git rev-parse origin/main)" != "$(git rev-parse upstream/main)" ]; then
+            echo "main 与 upstream/main 出现分叉，疑似被手动改动，停止自动同步以免覆盖。"
+            echo "diverged=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git merge --ff-only upstream/main
+          git push origin main
+          echo "diverged=false" >> "$GITHUB_OUTPUT"
+          echo "synced: $BEFORE -> $(git rev-parse --short upstream/main)"
+
+      - name: Report
+        if: steps.ff.outputs.diverged == 'false'
+        run: echo "main 已同步为上游镜像 $(git rev-parse --short upstream/main)"

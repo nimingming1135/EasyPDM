@@ -1,0 +1,120 @@
+name: Build zh-CN installer
+
+# 在 zh-CN 分支上自动编译简体中文 Windows 安装包（自包含 .NET 10 运行时），
+# 产物作为 workflow artifact 上传，并（在打了 v* 标签时）发布为 GitHub Release。
+# 本流程只使用 zh-CN 分支内容，不触碰 main / 上游。
+#
+# 触发：
+#   - zh-CN 分支有推送（中文代码/翻译更新后自动重编）
+#   - 手动 workflow_dispatch
+
+on:
+  push:
+    branches: [zh-CN]
+    paths:
+      - "EasyPDM.Api/**"
+      - "EasyPDM.Web/**"
+      - "db/**"
+      - "packaging/windows/**"
+      - ".github/workflows/build-zh-CN-installer.yml"
+  workflow_dispatch:
+
+# 避免自触发循环：CI 自身提交 Windows_installer/ 时跳过（只认人类/其它来源的改动）
+
+permissions:
+  contents: write   # 发布 Release 需要
+
+jobs:
+  build:
+    runs-on: windows-latest
+    # 跳过 CI 自己提交的推送，避免无限重编循环
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: zh-CN
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build frontend (中文已编译进 wwwroot)
+        working-directory: EasyPDM.Web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publish backend (self-contained, win-x64)
+        run: >
+          dotnet publish EasyPDM.Api -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -o packaging/windows/publish
+
+      - name: Compile installer (Inno Setup，含中文向导)
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\EasyPDM.iss
+
+      - name: Read built installer name
+        id: setup_exe
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem "packaging\windows\Output\*.exe" | Select-Object -First 1
+          # 重命名为带 zh-CN 后缀，便于与上游同名产物区分
+          $zhName = "EasyPDM_Windows_v0.8_zh-CN.exe"
+          Copy-Item $exe.FullName -Destination "packaging\windows\Output\$zhName" -Force
+          "path=packaging\windows\Output\$zhName" >> $env:GITHUB_OUTPUT
+          "name=$zhName" >> $env:GITHUB_OUTPUT
+          "sha256=$(Get-FileHash $exe.FullName -Algorithm SHA256 | Select-Object -ExpandProperty Hash)" >> $env:GITHUB_OUTPUT
+
+      - name: Compute SHA256SUMS
+        shell: pwsh
+        run: |
+          $h = Get-FileHash "packaging\windows\Output\EasyPDM_Windows_v0.8_zh-CN.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+          "$h  EasyPDM_Windows_v0.8_zh-CN.exe" | Set-Content "packaging\windows\Output\SHA256SUMS.txt" -Encoding ascii
+          Get-Content "packaging\windows\Output\SHA256SUMS.txt"
+
+      - name: Upload installer as artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: zh-CN-installer
+          path: |
+            packaging/windows/Output/EasyPDM_Windows_v0.8_zh-CN.exe
+            packaging/windows/Output/SHA256SUMS.txt
+          if-no-files-found: error
+
+      # 把编译产物提交回 zh-CN 分支的 Windows_installer/ 目录（仅当内容有变化），
+      # 让你 fork 的该目录始终持有最新的中文安装包。main / 上游不受影响。
+      - name: Commit installer to Windows_installer/
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path Windows_installer | Out-Null
+          Copy-Item "packaging\windows\Output\EasyPDM_Windows_v0.8_zh-CN.exe" "Windows_installer\EasyPDM_Windows_v0.8_zh-CN.exe" -Force
+          Copy-Item "packaging\windows\Output\SHA256SUMS.txt" "Windows_installer\SHA256SUMS.txt" -Force
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ($null -eq (git status --porcelain Windows_installer)) {
+            Write-Host "安装包无变化，跳过提交"
+            exit 0
+          }
+          git add Windows_installer
+          git commit -m "build(zh-CN): 自动编译并更新中文 Windows 安装包"
+          git push origin zh-CN
+
+      # 仅当推送了 v* 标签时，额外发布为 GitHub Release（例如本地打 tag v0.8-zhCN 后 push）
+      - name: Publish to GitHub Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            packaging/windows/Output/EasyPDM_Windows_v0.8_zh-CN.exe
+            packaging/windows/Output/SHA256SUMS.txt
+          name: EasyPDM 简体中文版 ${{ github.ref_name }}
+          body: |
+            简体中文版 Windows 安装包（自包含 .NET 10 运行时）。
+            由 build-zh-CN-installer 工作流自动编译，基于 zh-CN 分支。
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

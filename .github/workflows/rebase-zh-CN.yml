@@ -1,0 +1,82 @@
+name: Rebase zh-CN on upstream
+
+# 上游同步到 main 后，把 zh-CN 分支自动变基到最新 main，并：
+#   1. 自动结转已有中文翻译（保留 zh-CN 上的中文值）；
+#   2. 对上游新增、但 zh 还未译的键，用其 pl 值预填（保证 TypeScript 编译通过），
+#      并收集这些“待人工润色”的键，开一个 issue 提醒。
+# 只动 zh-CN 分支；main 由 sync-upstream.yml 维护，本流程不改 main。
+#
+# 触发：sync-upstream.yml 成功 push main 后由本工作流监听；也可手动触发。
+
+on:
+  workflow_run:
+    workflows: ["Sync upstream"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  rebase:
+    # 仅当上游确实领先时才跑（手动触发时总跑）
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.rebase.outputs.changed }}
+    steps:
+      - name: Checkout zh-CN
+        uses: actions/checkout@v5
+        with:
+          ref: zh-CN
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream + fetch
+        run: |
+          git remote add upstream https://github.com/pawelcel/EasyPDM.git || true
+          git fetch upstream main --quiet
+          git fetch origin main --quiet
+
+      - name: Rebase zh-CN onto upstream/main
+        id: rebase
+        run: |
+          set +e
+          git rebase upstream/main
+          if [ $? -ne 0 ]; then
+            echo "rebase 出现冲突，终止自动流程（交由人工处理）。"
+            git rebase --abort || true
+            echo "changed=conflict" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "changed=yes" >> "$GITHUB_OUTPUT"
+
+      - name: Carry over Chinese & flag untranslated keys
+        id: l10n
+        run: node .github/scripts/carryover-zh.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit & push zh-CN
+        if: steps.rebase.outputs.changed == 'yes'
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "chore(zh-CN): 结转中文翻译并预填上游新增键（待人工润色）"
+            git push origin zh-CN
+            echo "已推送 zh-CN 更新"
+          else
+            echo "无需改动"
+          fi
+
+      - name: Open/refresh issue for untranslated keys
+        if: env.ISSUE_BODY != ''
+        env:
+          ISSUE_BODY: ${{ steps.l10n.outputs.issue_body }}
+        run: node .github/scripts/open-l10n-issue.mjs
+        continue-on-error: true

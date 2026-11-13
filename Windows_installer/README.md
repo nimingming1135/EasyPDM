@@ -2,8 +2,12 @@
 
 本目录属于 **`zh-CN` 分支**，存放本 fork 编译出的简体中文 Windows 安装程序。
 
-- **`main` 分支**：与上游 [`pawelcel/EasyPDM`](https://github.com/pawelcel/EasyPDM) 保持一致，不含任何中文改动。
-- **`zh-CN` 分支**：简体中文界面、中文文档、三个 CAD 宏的中文文案，以及本目录的安装包。
+- **`main` 分支**：与上游 [`pawelcel/EasyPDM`](https://github.com/pawelcel/EasyPDM) 保持一致，不含任何中文改动（由 `sync-upstream` 工作流自动镜像）。
+- **`zh-CN` 分支**：简体中文界面、中文文档、三个 CAD 宏的中文文案，以及本目录的安装包。由以下工作流自动维护：
+  - `sync-upstream`：每 6 小时拉取上游，把 `main` 快进为上游镜像（不碰 zh-CN）。
+  - `rebase-zh-CN`：上游更新后把 zh-CN 变基到新 main，自动结转中文翻译，并用原文预填新增键，开 issue 提醒人工润色。
+  - `build-zh-CN-installer`：zh-CN 改动后自动重编中文 Windows 安装包，产物落在此目录并上传 artifact。
+  - `zh-l10n-check`：检测 FreeCAD 宏里缺失的中文键并开 issue。
 - 本 fork 不是原作者项目；原项目、版权与致谢均归 [`pawelcel/EasyPDM`](https://github.com/pawelcel/EasyPDM) 所有。
 
 ## 文件

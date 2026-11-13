@@ -1,0 +1,42 @@
+name: Check zh-CN localization
+
+# 检查中文翻译完整性，开 issue 提醒人工补译。
+# 覆盖两类：
+#   1) Web 前端 translations.ts —— 缺 zh 键会 tsc 失败，由 build 步骤暴露；
+#   2) FreeCAD 宏 .FCMacro —— 缺 zh 键静默回退英文（不报错），需主动检测未译键。
+#
+# 触发：zh-CN 推送后、每天定时（兜底）。
+
+on:
+  push:
+    branches: [zh-CN]
+    paths:
+      - "EasyPDM.FreeCad/**"
+      - "EasyPDM.Web/src/i18n/translations.ts"
+  schedule:
+    - cron: "43 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: zh-CN
+
+      - name: Check FreeCAD macros for missing zh keys
+        id: fc
+        run: python .github/scripts/check-freecad-zh.py
+        continue-on-error: true
+
+      - name: Open/refresh issue
+        if: env.ISSUE_BODY != ''
+        env:
+          ISSUE_BODY: ${{ steps.fc.outputs.issue_body }}
+        run: node .github/scripts/open-l10n-issue.mjs
+        continue-on-error: true
